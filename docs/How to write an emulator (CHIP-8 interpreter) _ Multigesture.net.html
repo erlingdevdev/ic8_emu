@@ -1,0 +1,1442 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0078)https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" prefix="og: https://ogp.me/ns#"><head profile="http://gmpg.org/xfn/11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8">
+
+
+
+			<link rel="stylesheet" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/style.css" type="text/css" media="all">
+			<link rel="stylesheet" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/layout.css">
+							<link rel="stylesheet" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/style(1).css">
+						<link rel="stylesheet" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/custom.css">
+		
+
+		<!-- All in One SEO 4.1.4.4 -->
+		<title>How to write an emulator (CHIP-8 interpreter) | Multigesture.net</title>
+		<meta name="description" content="This guide is intended to give a brief introduction to the world of emulation and will also teach you how to write one yourself from scratch. Personally I have been excited about emulators since the late 90&#39;s. As I didn&#39;t own a console back in the days (only had a C64), I was pleasantly surprised when I […]">
+		<meta name="robots" content="max-image-preview:large">
+		<link rel="canonical" href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/">
+		<meta property="og:locale" content="en_US">
+		<meta property="og:site_name" content="Multigesture.net | A multitouch and HCI research blog">
+		<meta property="og:type" content="article">
+		<meta property="og:title" content="How to write an emulator (CHIP-8 interpreter) | Multigesture.net">
+		<meta property="og:description" content="This guide is intended to give a brief introduction to the world of emulation and will also teach you how to write one yourself from scratch. Personally I have been excited about emulators since the late 90&#39;s. As I didn&#39;t own a console back in the days (only had a C64), I was pleasantly surprised when I […]">
+		<meta property="og:url" content="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/">
+		<meta property="article:published_time" content="2011-03-25T20:14:44+00:00">
+		<meta property="article:modified_time" content="2019-05-31T17:34:23+00:00">
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:domain" content="multigesture.net">
+		<meta name="twitter:title" content="How to write an emulator (CHIP-8 interpreter) | Multigesture.net">
+		<meta name="twitter:description" content="This guide is intended to give a brief introduction to the world of emulation and will also teach you how to write one yourself from scratch. Personally I have been excited about emulators since the late 90&#39;s. As I didn&#39;t own a console back in the days (only had a C64), I was pleasantly surprised when I […]">
+		<script id="twitter-wjs" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/widgets.js"></script><script async="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/analytics.js"></script><script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"WebSite","@id":"https:\/\/multigesture.net\/#website","url":"https:\/\/multigesture.net\/","name":"Multigesture.net","description":"A multitouch and HCI research blog","inLanguage":"en-US","publisher":{"@id":"https:\/\/multigesture.net\/#organization"}},{"@type":"Organization","@id":"https:\/\/multigesture.net\/#organization","name":"Multigesture.net","url":"https:\/\/multigesture.net\/"},{"@type":"BreadcrumbList","@id":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/multigesture.net\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/multigesture.net\/","name":"Home","description":"A blog dedicated to multi-touch research and information visualization","url":"https:\/\/multigesture.net\/"},"nextItem":"https:\/\/multigesture.net\/articles\/#listItem"},{"@type":"ListItem","@id":"https:\/\/multigesture.net\/articles\/#listItem","position":2,"item":{"@type":"WebPage","@id":"https:\/\/multigesture.net\/articles\/","name":"Articles","description":"Hardware: Building a multi-touchscreen (based on FTIR) The camera The screen (Acrylic) The frame Electronics Testing 1 2 3 Software: Touchlib compiling instructions Touchlib compiling instructions (Windows) Touchlib compiling instructions (Ubuntu 7.04) Touchlib compiling instructions (Fedora Core 9) Multitouch software development tutorials Touchlib SVN \/ Manual AS3 - Getting started with Adobe Flash using the [\u2026]","url":"https:\/\/multigesture.net\/articles\/"},"nextItem":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/#listItem","previousItem":"https:\/\/multigesture.net\/#listItem"},{"@type":"ListItem","@id":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/#listItem","position":3,"item":{"@type":"WebPage","@id":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/","name":"How to write an emulator (CHIP-8 interpreter)","description":"This guide is intended to give a brief introduction to the world of emulation and will also teach you how to write one yourself from scratch. Personally I have been excited about emulators since the late 90's. As I didn't own a console back in the days (only had a C64), I was pleasantly surprised when I [\u2026]","url":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/"},"previousItem":"https:\/\/multigesture.net\/articles\/#listItem"}]},{"@type":"WebPage","@id":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/#webpage","url":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/","name":"How to write an emulator (CHIP-8 interpreter) | Multigesture.net","description":"This guide is intended to give a brief introduction to the world of emulation and will also teach you how to write one yourself from scratch. Personally I have been excited about emulators since the late 90's. As I didn't own a console back in the days (only had a C64), I was pleasantly surprised when I [\u2026]","inLanguage":"en-US","isPartOf":{"@id":"https:\/\/multigesture.net\/#website"},"breadcrumb":{"@id":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/#breadcrumblist"},"image":{"@type":"ImageObject","@id":"https:\/\/multigesture.net\/#mainImage","url":"https:\/\/multigesture.net\/wp-content\/uploads\/2011\/01\/chip8-space-invaders.jpg","width":2272,"height":1704},"primaryImageOfPage":{"@id":"https:\/\/multigesture.net\/articles\/how-to-write-an-emulator-chip-8-interpreter\/#mainImage"},"datePublished":"2011-03-25T20:14:44+02:00","dateModified":"2019-05-31T17:34:23+02:00"}]}
+		</script>
+		<!-- All in One SEO -->
+
+
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/jquery.min.js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/jquery.js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/hoverIntent.js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/superfish.js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/jquery.fieldtag.min.js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/functions.js"></script>
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="Multigesture.net » Feed" href="https://multigesture.net/feed/">
+<link rel="alternate" type="application/rss+xml" title="Multigesture.net » Comments Feed" href="https://multigesture.net/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Multigesture.net » How to write an emulator (CHIP-8 interpreter) Comments Feed" href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/feed/">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/multigesture.net\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.8.1"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/wp-emoji-release.min.js" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel="stylesheet" id="wp-block-library-css" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/style.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="rotatingtweets-css" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/style(2).css" type="text/css" media="all">
+<link rel="stylesheet" id="dlm-frontend-css" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/frontend.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-syntax-css-css" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/wp-syntax.css" type="text/css" media="all">
+<link rel="stylesheet" id="nextgen_widgets_style-css" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/widgets.css" type="text/css" media="all">
+<link rel="stylesheet" id="nextgen_basic_thumbnails_style-css" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/nextgen_basic_thumbnails.css" type="text/css" media="all">
+<link rel="stylesheet" id="nextgen_basic_slideshow_style-css" href="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/ngg_basic_slideshow.css" type="text/css" media="all">
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/jquery.min(1).js" id="jquery-core-js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/jquery-migrate.min.js" id="jquery-migrate-js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/jquery.cycle.all.min.js" id="jquery-cycle-js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/rotating_tweet.js" id="rotating_tweet-js"></script>
+<link rel="https://api.w.org/" href="https://multigesture.net/wp-json/"><link rel="alternate" type="application/json" href="https://multigesture.net/wp-json/wp/v2/pages/1660"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://multigesture.net/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://multigesture.net/wp-includes/wlwmanifest.xml"> 
+<link rel="shortlink" href="https://multigesture.net/?p=1660">
+<link rel="alternate" type="application/json+oembed" href="https://multigesture.net/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmultigesture.net%2Farticles%2Fhow-to-write-an-emulator-chip-8-interpreter%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://multigesture.net/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmultigesture.net%2Farticles%2Fhow-to-write-an-emulator-chip-8-interpreter%2F&amp;format=xml">
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-387767-8', 'auto');
+			ga('set', 'forceSSL', true);
+			ga('send', 'pageview');
+		</script>
+
+	
+<link rel="pingback" href="https://multigesture.net/xmlrpc.php">
+<link rel="canonical" content="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/">
+<meta name="description" content="This guide is intended to give a brief introduction to the world of emulation and will also teach you how to write one yourself from scratch.
+
+Perso">
+<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><script charset="utf-8" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/button.0d6aa7fd095b2a9dd19cc66c7c2ed64b.js"></script></head>
+<body class="page">
+	<div id="wrapper">
+		<div class="width ">
+
+	<div id="topbar" class="clearfix">
+		<a class="login" href="https://multigesture.net/wp-login.php" title="Login">Login</a><ul class="sf-menu clearfix sf-js-enabled"><li><a href="https://multigesture.net/">Home</a></li><li class="page_item page-item-2"><a href="https://multigesture.net/about/">About</a></li><li class="page_item page-item-5 page_item_has_children current_page_ancestor current_page_parent"><a href="https://multigesture.net/articles/">Articles</a><ul class="children" style="display: none; visibility: hidden;"><li class="page_item page-item-203"><a href="https://multigesture.net/articles/as3-getting-started-with-adobe-flash-using-the-free-flash-develop-ide/">AS3 – Getting started with Adobe Flash using the free Flash Develop IDE</a></li><li class="page_item page-item-191"><a href="https://multigesture.net/articles/as3multitouch-simulator/">AS3 – Multitouch simulator</a></li><li class="page_item page-item-2171"><a href="https://multigesture.net/articles/booting-a-macbook-pro-in-ahci-mode-on-win7/">Booting a Macbook Pro (2009) in AHCI mode on Win7</a></li><li class="page_item page-item-2357"><a href="https://multigesture.net/articles/how-to-bootstrap-a-synology-ds212/">How to bootstrap a Synology DS212+</a></li><li class="page_item page-item-691"><a href="https://multigesture.net/articles/how-to-compile-openscenegraph-2-x-using-mingw/">How to compile OpenSceneGraph 2.x using MinGW/MSYS</a></li><li class="page_item page-item-2377"><a href="https://multigesture.net/articles/how-to-compile-openttd-for-a-synology-ds212-2/">How to compile OpenTTD for a Synology DS212+</a></li><li class="page_item page-item-2368"><a href="https://multigesture.net/articles/how-to-compile-unison-for-a-synology-ds212/">How to compile Unison for a Synology DS212+</a></li><li class="page_item page-item-2688"><a href="https://multigesture.net/articles/how-to-compile-unison-for-a-synology-nas-dsm-6-2/">How to compile Unison for a Synology NAS (DSM 6.2)</a></li><li class="page_item page-item-1891"><a href="https://multigesture.net/articles/how-to-draw-pixels-to-a-texture-opengl/">How to draw pixels to a texture (OpenGL)</a></li><li class="page_item page-item-666"><a href="https://multigesture.net/articles/how-to-install-mingw-msys-and-eclipse-on-windows/">How to install MinGW, MSYS and Eclipse on windows</a></li><li class="page_item page-item-1938"><a href="https://multigesture.net/articles/how-to-mount-nfs-on-windows-7-and-mac-os-x/">How to mount NFS on Windows 7 and Mac OS X</a></li><li class="page_item page-item-2089"><a href="https://multigesture.net/articles/how-to-repair-a-damaged-pcb-board-wd1200/">How to repair a damaged PCB board – WD1200</a></li><li class="page_item page-item-1905"><a href="https://multigesture.net/articles/how-to-setup-a-python-environment-on-mac-os-x-lion-using-macports/">How to setup a Python environment on Mac OS X Lion using macports</a></li><li class="page_item page-item-2029"><a href="https://multigesture.net/articles/how-to-setup-cocos2d-x-windows-and-android/">How to setup Cocos2d-x (Windows and Android)</a></li><li class="page_item page-item-1965"><a href="https://multigesture.net/articles/how-to-setup-openframeworks-for-android-on-windows/">How to setup openFrameworks for Android on Windows</a></li><li class="page_item page-item-1897"><a href="https://multigesture.net/articles/how-to-tunnel-with-ssh-using-putty/">How to Tunnel with SSH using Putty</a></li><li class="page_item page-item-770"><a href="https://multigesture.net/articles/how-to-upgrade-your-mingw-with-commonly-used-libraries/">How to upgrade your MinGW with commonly used libraries</a></li><li class="page_item page-item-2474"><a href="https://multigesture.net/articles/how-to-use-cron-on-a-synology-nas/">How to use cron on a Synology NAS</a></li><li class="page_item page-item-2486"><a href="https://multigesture.net/articles/how-to-use-your-own-router-on-kpn-glasvezel/">How to use your own router on KPN Glasvezel</a></li><li class="page_item page-item-1660 current_page_item"><a href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/" aria-current="page">How to write an emulator (CHIP-8 interpreter)</a></li><li class="page_item page-item-409"><a href="https://multigesture.net/articles/igraph-05x-visual-studio-2005-fix/">igraph 0.5.x visual studio 2005 ‘fix’</a></li><li class="page_item page-item-2724"><a href="https://multigesture.net/articles/inspecting-https-network-traffic-of-any-android-app/">Inspecting (HTTPS) Network Traffic of any Android App</a></li><li class="page_item page-item-301"><a href="https://multigesture.net/articles/t-mobile-g1-downgrade-rc30rc8-rooting-update-tutorial/">T-mobile G1 downgrade (RC30/RC8) / rooting / update tutorial</a></li><li class="page_item page-item-70"><a href="https://multigesture.net/articles/touchlib-compiling-instructions-fedora-core-9/">Touchlib compiling instructions (Fedora Core 9)</a></li><li class="page_item page-item-35"><a href="https://multigesture.net/articles/touchlib-compiling-instructions-ubuntu/">Touchlib compiling instructions (Ubuntu)</a></li><li class="page_item page-item-34"><a href="https://multigesture.net/articles/touchlib-compiling-instructions/">Touchlib compiling instructions (Windows)</a></li><li class="page_item page-item-178"><a href="https://multigesture.net/articles/touchlib-svn-manual/">Touchlib SVN / Manual</a></li><li class="page_item page-item-115"><a href="https://multigesture.net/articles/zepto-znote-6224w/">Zepto Znote 6224W – Cleaning the cpu fan</a></li></ul></li><li class="page_item page-item-45"><a href="https://multigesture.net/downloads/">Downloads</a></li><li class="page_item page-item-340"><a href="https://multigesture.net/events/">Events</a></li><li class="page_item page-item-1931"><a href="https://multigesture.net/featured/">Featured</a></li><li class="page_item page-item-345 page_item_has_children"><a href="https://multigesture.net/projects/">Projects</a><ul class="children" style="display: none; visibility: hidden;"><li class="page_item page-item-1381"><a href="https://multigesture.net/projects/earth-friends/">Earth Friends</a></li><li class="page_item page-item-291"><a href="https://multigesture.net/projects/firc/">fIRC</a></li><li class="page_item page-item-1584"><a href="https://multigesture.net/projects/hack-descent-3-callsign/">Hack: Descent 3 callsign</a></li><li class="page_item page-item-79"><a href="https://multigesture.net/projects/multi-touch-media-application-pro/">Multi-touch Media Application Pro</a></li><li class="page_item page-item-76"><a href="https://multigesture.net/projects/multi-touch-video-puzzle-game/">Multi-touch video puzzle game</a></li><li class="page_item page-item-1614"><a href="https://multigesture.net/projects/mychip8-android-port/">MyChip8 Android port</a></li><li class="page_item page-item-1603"><a href="https://multigesture.net/projects/mychip8/">MyChip8 emulator</a></li><li class="page_item page-item-77"><a href="https://multigesture.net/projects/nasa-world-wind-plugin/">NASA World Wind plugin</a></li><li class="page_item page-item-2014"><a href="https://multigesture.net/projects/nodebeat/">NodeBeat</a></li><li class="page_item page-item-2245"><a href="https://multigesture.net/projects/ofxqnx/">ofxQNX</a></li><li class="page_item page-item-2570"><a href="https://multigesture.net/projects/pcsx2/">PCSX2</a></li><li class="page_item page-item-81"><a href="https://multigesture.net/projects/real-time-fluid-dynamics/">Real-Time Fluid Dynamics</a></li><li class="page_item page-item-78"><a href="https://multigesture.net/projects/tdesk/">tDesk</a></li><li class="page_item page-item-80"><a href="https://multigesture.net/projects/touch-tracer/">Touch Tracer</a></li><li class="page_item page-item-983"><a href="https://multigesture.net/projects/touchlib/">Touchlib</a></li><li class="page_item page-item-1376"><a href="https://multigesture.net/projects/visualizing-wikileaks-mirror-spread/">Visualizing Wikileaks mirror spread</a></li></ul></li><li class="page_item page-item-437"><a href="https://multigesture.net/publications/">Publications</a></li><li class="page_item page-item-1052 page_item_has_children"><a href="https://multigesture.net/research-projects/">Research projects</a><ul class="children" style="display: none; visibility: hidden;"><li class="page_item page-item-1095"><a href="https://multigesture.net/research-projects/twilight-graph-visualization/">Graph Visualization</a></li><li class="page_item page-item-1057"><a href="https://multigesture.net/research-projects/interactive-networks/">Interactive Networks</a></li><li class="page_item page-item-1118"><a href="https://multigesture.net/research-projects/involv/">Involv</a></li><li class="page_item page-item-2026"><a href="https://multigesture.net/research-projects/nemo-science-center/">NEMO Science Center</a></li><li class="page_item page-item-1124"><a href="https://multigesture.net/research-projects/phylogenie/">PhyloGenie</a></li><li class="page_item page-item-1113"><a href="https://multigesture.net/research-projects/treepanorama-tree-visualization/">Tree Visualization</a></li></ul></li></ul>	
+
+	</div><!-- #topbar -->
+	
+	<div id="header" class="clearfix">
+		<h1 id="blogtitle"><a href="https://multigesture.net/">Multigesture.net</a></h1><p class="blogdesc">A multitouch and HCI research blog</p>			
+			
+		<div id="subscribe">
+			<h3>Subscribe</h3> <a href="https://multigesture.net/feed/" title="How to write an emulator (CHIP-8 interpreter) | Multigesture.netMultigesture.net latest post">RSS</a> | Email
+			<form class="clearfix" id="subscribeform" action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#39;https://feedburner.google.com/fb/a/mailverify?uri=&#39;, &#39;popupwindow&#39;, &#39;scrollbars=yes,width=550,height=520&#39;);return true">
+				<input class="input" type="text" id="email" name="email">
+				<input type="hidden" value="" name="uri">
+				<input class="button" value="Subscribe" type="submit">
+			</form>
+		</div><!-- .subscribe -->
+	</div><!-- #header -->
+	
+		<div id="navbar" class="clearfix">
+		
+	<ul class="sf-menu-wrap clearfix">
+		<li class="nav-first">A multitouch and HCI research blog</li>
+		<li class="fleft">
+				<ul class="sf-menu clearfix sf-js-enabled">
+			<li class="cat-item cat-item-7"><a href="https://twitter.com/LaurenceMuller" title="Twitter"><img src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/twitter_16.png" alt="" border="0" height="16" width="16" align="bottom"> Twitter</a></li>			
+			<li class="cat-item cat-item-7"><a href="https://www.linkedin.com/in/lylmuller" title="LinkedIn Profile"><img src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/linkedin_16.png" alt="" border="0" height="16" width="16" align="bottom"> LinkedIn</a></li>
+			<li class="cat-item cat-item-7"><a href="https://www.youtube.com/falcon4ever" title="Youtube Profile"><img src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/youtube_16.png" alt="" border="0" height="16" width="16" align="bottom"> Youtube</a></li>
+			
+		</ul>
+		</li>
+		<li class="nav-last">&nbsp;</li>
+	</ul>
+	</div><!-- #navbar -->
+	
+</div><!-- .width -->
+	
+	<div id="outerwrap"><div class="faux-column width "><div id="container"><div id="content">		
+
+		<div class="breadcrumb">
+
+			
+	<a href="https://multigesture.net/">Home</a> 
+
+	 » <a href="https://multigesture.net/articles/">Articles</a> » <a href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/">How to write an emulator (CHIP-8 interpreter)</a>
+
+		</div>
+				
+				
+			<div class="page" id="post-1660">
+				<h1 class="page-title">How to write an emulator (CHIP-8 interpreter)</h1>
+				<div class="entry-content">
+					<p>This guide is intended to give a brief introduction to the world of emulation and will also teach you how to write one yourself from scratch.</p>
+<p>Personally I have been excited about emulators since the late 90’s. As I didn’t own a console back in the days (only had a <a href="http://en.wikipedia.org/wiki/Commodore_64">C64</a>), I was pleasantly&nbsp;surprised&nbsp;when I learned that you could use an emulator to run console games on the PC. I still remember playing <a href="http://en.wikipedia.org/wiki/Super_Mario_Bros._3">Super Mario 3</a> on the PC using a <a href="http://en.wikipedia.org/wiki/Super_Nintendo_Entertainment_System">SNES/Super Famicom</a> emulator <a href="http://en.wikipedia.org/wiki/Snes9x">Snes9x</a> and a few years later completing <a href="http://en.wikipedia.org/wiki/Metal_Gear_Solid">Metal Gear Solid</a> using <a href="http://en.wikipedia.org/wiki/Bleem!">Bleem!</a> (<a href="http://en.wikipedia.org/wiki/PlayStation_(console)">PSX</a> emulator).</p>
+<p>These days however I’m more focussed on providing support to emulator projects of recent consoles such as: <a href="http://pcsx2.net/">PCSX2</a> (Sony Playstation 2), <a href="http://dolphin-emu.org/">Dolphin-emu</a> (Nintendo Gamecube and Wii) and <a href="http://code.google.com/p/nulldc/">nullDC</a> (Sega Dreamcast).</p>
+<p>While this guide expects you to have some basic knowledge of computer systems and assumes you know a program language, it should also be an interesting read for people who are interested in emulation in general.</p>
+<p><a class="thickbox" title="Space Invaders title screen" href="https://multigesture.net/wp-content/uploads/2011/03/spaceinvaders_title.jpg"><img loading="lazy" class="size-medium wp-image-1703 aligncenter" title="Space Invaders title screen" alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/spaceinvaders_title-300x150.jpg" width="300" height="150" srcset="https://multigesture.net/wp-content/uploads/2011/03/spaceinvaders_title-300x150.jpg 300w, https://multigesture.net/wp-content/uploads/2011/03/spaceinvaders_title.jpg 640w" sizes="(max-width: 300px) 100vw, 300px"></a></p>
+<h3>#define emulator</h3>
+<p>I think it’s important to first understand what an emulator is and isn’t.</p>
+<p>An emulator is a computer program that mimics the internal design and functionality of a computer system (System A). It allows users to run software designed for this specific system (Sytem A) on a totally different computer system or architecture (System B).</p>
+<p>Often people confuse a simulator with an emulator and vice versa. Just remember that these words aren’t synonyms.</p>
+<p>Let’s take a look at the following example:<br>
+<a href="http://en.wikipedia.org/wiki/Pong"> Pong</a> is a 2D tennis game which was developed by <a href="http://www.atari.com/">Atari</a> and ran on their own hardware. However, the game wasn’t just available on Atari systems, but also on rival platforms such as Amstrad, Amiga and the C64.</p>
+<p>Since not every Pong game was licensed by Atari to run on these platforms, it also&nbsp;meant&nbsp;that not &nbsp;every game was running the code from Atari. Basically what happened is that people created their own implementation (clones) of the game Pong. In this case they <em>simulated</em> the looks and game behavior of Pong.</p>
+<p>In case of an emulator, we choose not to re-implement the game Pong for our native system. Instead, we re-create the environment with a computer program which allows us to run the original machine code of Pong. A benefit of this is that it won’t just allow us to run Pong, but also any other application developed for that platform.</p>
+<p><a class="thickbox" title="Pong" href="https://multigesture.net/wp-content/uploads/2011/03/pong2.jpg"><img loading="lazy" class="size-medium wp-image-1701 aligncenter" title="Pong2" alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/pong2-300x150.jpg" width="300" height="150" srcset="https://multigesture.net/wp-content/uploads/2011/03/pong2-300x150.jpg 300w, https://multigesture.net/wp-content/uploads/2011/03/pong2.jpg 640w" sizes="(max-width: 300px) 100vw, 300px"></a></p>
+<h3>What is a CHIP-8?</h3>
+<p>The Chip 8 actually never was a real system, but more like a virtual machine (VM) developed in the 70’s by&nbsp;Joseph Weisbecker. Games written in the Chip 8 language could easily run on systems that had a Chip 8 interpreter.</p>
+<h3>Why start with a CHIP-8 emulator?</h3>
+<p>Writing a Chip 8 emulator is probably the easiest emulation project you can undertake. Due to small number of <a href="http://en.wikipedia.org/wiki/Opcode">opcodes</a> (35 in total for Chip 8 ) and the fact that a lot of instructions are used in more advanced <a href="http://en.wikipedia.org/wiki/Central_processing_unit">CPU</a>s, a project like this is educational (get a better understanding of how the CPU works and how machine code is executed), manageable (small number of opcodes to implement) and not too time consuming (project can be finished in a few days).</p>
+<p><a class="thickbox" title="Brix: a Breakout clone" href="https://multigesture.net/wp-content/uploads/2011/03/brix.jpg"><img loading="lazy" class="size-medium wp-image-1699 aligncenter" title="Brix" alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/brix-300x150.jpg" width="300" height="150" srcset="https://multigesture.net/wp-content/uploads/2011/03/brix-300x150.jpg 300w, https://multigesture.net/wp-content/uploads/2011/03/brix.jpg 640w" sizes="(max-width: 300px) 100vw, 300px"></a></p>
+<h3>Before you start…</h3>
+<ul>
+<li>Pick a programming language you’re familiar with (C/C++ or Java are common).<br>
+The examples below will use C/C++</li>
+<li>Don’t use this project as a way to learn how to program.<br>
+(If <a href="http://en.wikipedia.org/wiki/Bitwise_operation">bitwise operations</a> confuse you, study them first)</li>
+<li>You will probably need to use 3rd party libraries to handle audio / video output and user input (<a href="http://www.opengl.org/resources/libraries/glut/">GLUT</a> / <a href="http://www.libsdl.org/">SDL</a> / <a href="http://www.microsoft.com/directx">DirectX</a>)</li>
+<li>OK GO!</li>
+</ul>
+<p><a class="thickbox" title="Space Invaders" href="https://multigesture.net/wp-content/uploads/2011/03/spaceinvaders.jpg"><img loading="lazy" class="size-medium wp-image-1702 aligncenter" title="Space Invaders" alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/spaceinvaders-300x150.jpg" width="300" height="150" srcset="https://multigesture.net/wp-content/uploads/2011/03/spaceinvaders-300x150.jpg 300w, https://multigesture.net/wp-content/uploads/2011/03/spaceinvaders.jpg 640w" sizes="(max-width: 300px) 100vw, 300px"></a></p>
+<h3>CPU Specifications</h3>
+<p>When you start writing an emulator, it is important that you find as much information as possible about the system you want to emulate. Try to find out how much memory and registers are used in the system, what architecture it is using and see if you can get hold of technical documents that describe the instruction set.</p>
+<p>In the case of the Chip 8, I would recommend taking a look at the <a href="http://en.wikipedia.org/wiki/CHIP-8#Virtual_machine_description">Chip 8 description</a> on Wikipedia.</p>
+<p>I’ll give you a brief overview of the Chip 8 system and some hints on how to implement the essential parts:</p>
+<ul>
+<li>The Chip 8 has <a href="http://en.wikipedia.org/wiki/CHIP-8#Opcode_table">35 opcodes</a> which are all two bytes long. To store the current opcode, we need a data type that allows us to store two bytes. An unsigned short has the length of two bytes and therefor fits our needs:</li>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> opcode<span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned short opcode;</p></div>
+
+</li>
+</ul>
+<ul>
+<li>The Chip 8 has 4K memory in total, which we can emulated as:</li>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">char</span> memory<span style="color: #008000;">[</span><span style="color: #0000dd;">4096</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned char memory[4096];</p></div>
+
+</li>
+</ul>
+<ul>
+<li>CPU registers:&nbsp;The Chip 8 has 15 8-bit general purpose registers named V0,V1 up to VE. The 16th register is used &nbsp;for the ‘carry flag’. Eight bits is one byte so we can use an unsigned char for this purpose:</li>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">char</span> V<span style="color: #008000;">[</span><span style="color: #0000dd;">16</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned char V[16];</p></div>
+
+</li>
+</ul>
+<ul>
+<li>There is an Index register I and a program counter (pc) which can have a value from <code>0x000</code> to <code>0xFFF</code></li>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> I<span style="color: #008080;">;</span>
+<span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> pc<span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned short I;
+unsigned short pc;</p></div>
+
+</li>
+</ul>
+<ul>
+<li>The systems memory map:</li>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #208080;">0x000</span><span style="color: #000040;">-</span><span style="color: #208080;">0x1FF</span> <span style="color: #000040;">-</span> Chip <span style="color: #0000dd;">8</span> interpreter <span style="color: #008000;">(</span>contains font set in emu<span style="color: #008000;">)</span>
+<span style="color: #208080;">0x050</span><span style="color: #000040;">-</span><span style="color: #208080;">0x0A0</span> <span style="color: #000040;">-</span> Used <span style="color: #0000ff;">for</span> the built in 4x5 pixel font set <span style="color: #008000;">(</span><span style="color: #0000dd;">0</span><span style="color: #000040;">-</span>F<span style="color: #008000;">)</span>
+<span style="color: #208080;">0x200</span><span style="color: #000040;">-</span><span style="color: #208080;">0xFFF</span> <span style="color: #000040;">-</span> Program ROM <span style="color: #0000ff;">and</span> work RAM</pre></td></tr></tbody></table><p class="theCode" style="display:none;">0x000-0x1FF - Chip 8 interpreter (contains font set in emu)
+0x050-0x0A0 - Used for the built in 4x5 pixel font set (0-F)
+0x200-0xFFF - Program ROM and work RAM</p></div>
+
+</li>
+</ul>
+<ul>
+<li>The graphics system: The chip 8 has one instruction that draws sprite to the screen. Drawing is done in XOR mode and if a pixel is turned off as a result of drawing, the VF register is set. This is used for collision detection.</li>
+<li>The graphics of the Chip 8 are black and white and the screen has a total of 2048 pixels (64 x 32). This can easily be implemented using an array that hold the pixel state (1 or 0):</li>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">char</span> gfx<span style="color: #008000;">[</span><span style="color: #0000dd;">64</span> <span style="color: #000040;">*</span> <span style="color: #0000dd;">32</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned char gfx[64 * 32];</p></div>
+
+</li>
+</ul>
+<ul>
+<li>Interupts and hardware registers. The Chip 8 has none, but there are two timer registers that count at 60 Hz. When set above zero they will count down to zero.</li>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">char</span> delay_timer<span style="color: #008080;">;</span>
+<span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">char</span> sound_timer<span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned char delay_timer;
+unsigned char sound_timer;</p></div>
+
+</li>
+<li>The system’s buzzer sounds whenever the sound timer reaches zero.</li>
+</ul>
+<p>It is important to know that the Chip 8 instruction set has opcodes that allow the program to jump to a certain address or call a subroutine. While the specification don’t mention a stack, you will need to implement one as part of the interpreter yourself. The stack is used to remember the current location before a jump is performed. So anytime you perform a jump or call a subroutine, store the program counter in the stack before proceeding. The system has 16 levels of stack and in order to remember which level of the stack is used, you need to implement a stack pointer (sp).</p>
+<ul>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> stack<span style="color: #008000;">[</span><span style="color: #0000dd;">16</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span>
+<span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> sp<span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned short stack[16];
+unsigned short sp;</p></div>
+
+</li>
+</ul>
+<p>Finally, the Chip 8 has a HEX based keypad (<code>0x0-0xF</code>), you can use an array to store the current state of the key.</p>
+<ul>
+<li>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">char</span> key<span style="color: #008000;">[</span><span style="color: #0000dd;">16</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned char key[16];</p></div>
+
+</li>
+</ul>
+<h3>Game Loop</h3>
+<p>To give you an idea on how to design your emulator, I made a small example of a layout. It does not teach you how to use GLUT or SDL to handle graphics and input but merely shows you how the flow of your emulator should be.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #339900;">#include </span>
+<span style="color: #339900;">#include   // OpenGL graphics and input</span>
+<span style="color: #339900;">#include "chip8.h" // Your cpu core implementation</span>
+&nbsp;
+chip8 myChip8<span style="color: #008080;">;</span>
+&nbsp;
+<span style="color: #0000ff;">int</span> main<span style="color: #008000;">(</span><span style="color: #0000ff;">int</span> argc, <span style="color: #0000ff;">char</span> <span style="color: #000040;">**</span>argv<span style="color: #008000;">)</span> 
+<span style="color: #008000;">{</span>
+  <span style="color: #666666;">// Set up render system and register input callbacks</span>
+  setupGraphics<span style="color: #008000;">(</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+  setupInput<span style="color: #008000;">(</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+&nbsp;
+  <span style="color: #666666;">// Initialize the Chip8 system and load the game into the memory  </span>
+  myChip8.<span style="color: #007788;">initialize</span><span style="color: #008000;">(</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+  myChip8.<span style="color: #007788;">loadGame</span><span style="color: #008000;">(</span><span style="color: #FF0000;">"pong"</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+&nbsp;
+  <span style="color: #666666;">// Emulation loop</span>
+  <span style="color: #0000ff;">for</span><span style="color: #008000;">(</span><span style="color: #008080;">;;</span><span style="color: #008000;">)</span>
+  <span style="color: #008000;">{</span>
+    <span style="color: #666666;">// Emulate one cycle</span>
+    myChip8.<span style="color: #007788;">emulateCycle</span><span style="color: #008000;">(</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+&nbsp;
+    <span style="color: #666666;">// If the draw flag is set, update the screen</span>
+    <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span>myChip8.<span style="color: #007788;">drawFlag</span><span style="color: #008000;">)</span>
+      drawGraphics<span style="color: #008000;">(</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+&nbsp;
+    <span style="color: #666666;">// Store key press state (Press and Release)</span>
+    myChip8.<span style="color: #007788;">setKeys</span><span style="color: #008000;">(</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>	
+  <span style="color: #008000;">}</span>
+&nbsp;
+  <span style="color: #0000ff;">return</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span>
+<span style="color: #008000;">}</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">#include 
+#include   // OpenGL graphics and input
+#include "chip8.h" // Your cpu core implementation
+
+chip8 myChip8;
+
+int main(int argc, char **argv) 
+{
+  // Set up render system and register input callbacks
+  setupGraphics();
+  setupInput();
+
+  // Initialize the Chip8 system and load the game into the memory  
+  myChip8.initialize();
+  myChip8.loadGame("pong");
+
+  // Emulation loop
+  for(;;)
+  {
+    // Emulate one cycle
+    myChip8.emulateCycle();
+
+    // If the draw flag is set, update the screen
+    if(myChip8.drawFlag)
+      drawGraphics();
+
+    // Store key press state (Press and Release)
+    myChip8.setKeys();	
+  }
+
+  return 0;
+}</p></div>
+
+<ul>
+<li>Line 3-5: In this example we assume you will create a separate class to handle the opcodes.</li>
+<li>Line 10-11: Setup the graphics (window size, display mode, etc) and input system (bind callbacks)</li>
+<li>Line 14: Clear the memory, registers and screen</li>
+<li>Line 15: Copy the program into the memory</li>
+<li>Line 21: Emulate one cycle of the system</li>
+<li>Line 24: Because the system does not draw every cycle, we should set a draw flag when we need to update our screen. Only two opcodes should set this flag:
+<ul>
+<li><code>0x00E0</code> – Clears the screen</li>
+<li><code>0xDXYN</code> – Draws a sprite on the screen</li>
+</ul>
+</li>
+<li>Line 28: If we press or release a key, we should store this state in the part that emulates the keypad</li>
+</ul>
+<h3>Emulation cycle</h3>
+<p>Next we will look into the emulation cycle.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">void</span> chip8<span style="color: #008080;">::</span><span style="color: #007788;">initialize</span><span style="color: #008000;">(</span><span style="color: #008000;">)</span>
+<span style="color: #008000;">{</span>
+  <span style="color: #666666;">// Initialize registers and memory once</span>
+<span style="color: #008000;">}</span>
+&nbsp;
+<span style="color: #0000ff;">void</span> chip8<span style="color: #008080;">::</span><span style="color: #007788;">emulateCycle</span><span style="color: #008000;">(</span><span style="color: #008000;">)</span>
+<span style="color: #008000;">{</span>
+  <span style="color: #666666;">// Fetch Opcode</span>
+  <span style="color: #666666;">// Decode Opcode</span>
+  <span style="color: #666666;">// Execute Opcode</span>
+&nbsp;
+  <span style="color: #666666;">// Update timers</span>
+<span style="color: #008000;">}</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">void chip8::initialize()
+{
+  // Initialize registers and memory once
+}
+
+void chip8::emulateCycle()
+{
+  // Fetch Opcode
+  // Decode Opcode
+  // Execute Opcode
+
+  // Update timers
+}</p></div>
+
+<p>Every cycle, the method <em>emulateCycle</em> is called which emulates one cycle of the Chip 8 CPU. During this cycle, the emulator will Fetch, Decode and Execute one opcode.</p>
+<p><strong>Fetch opcode</strong><br>
+During this step, the system will fetch one opcode from the memory at the location specified by the program counter (pc). In our Chip 8 emulator, data is stored in an array in which each address contains one byte. As one opcode is 2 bytes long, we will need to fetch two successive bytes and merge them to get the actual opcode.</p>
+<p>To demonstrate how this works we will be using opcode <code>0xA2F0</code>.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #666666;">// Assume the following:</span>
+memory<span style="color: #008000;">[</span>pc<span style="color: #008000;">]</span>     <span style="color: #000080;">==</span> <span style="color: #208080;">0xA2</span>
+memory<span style="color: #008000;">[</span>pc <span style="color: #000040;">+</span> <span style="color: #0000dd;">1</span><span style="color: #008000;">]</span> <span style="color: #000080;">==</span> <span style="color: #208080;">0xF0</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">// Assume the following:
+memory[pc]     == 0xA2
+memory[pc + 1] == 0xF0</p></div>
+
+<p>In order to merge both bytes and store them in an <code>unsigned short</code> (2 bytes datatype) we will use the bitwise OR operation:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;">opcode <span style="color: #000080;">=</span> memory<span style="color: #008000;">[</span>pc<span style="color: #008000;">]</span> <span style="color: #000080;">&lt;&lt;</span> <span style="color: #0000dd;">8</span> <span style="color: #000040;">|</span> memory<span style="color: #008000;">[</span>pc <span style="color: #000040;">+</span> <span style="color: #0000dd;">1</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">opcode = memory[pc] &lt;&lt; 8 | memory[pc + 1];</p></div>
+
+<p>So what did actually happen?<br>
+First we shifted <code>0xA2</code> left 8 bits, which adds 8 zeros.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #208080;">0xA2</span>       <span style="color: #208080;">0xA2</span> <span style="color: #000080;">&lt;&lt;</span> <span style="color: #0000dd;">8</span> <span style="color: #000080;">=</span> <span style="color: #208080;">0xA200</span>   HEX
+<span style="color: #0000dd;">10100010</span>   <span style="color: #0000dd;">1010001000000000</span>     BIN</pre></td></tr></tbody></table><p class="theCode" style="display:none;">0xA2       0xA2 &lt;&lt; 8 = 0xA200   HEX
+10100010   1010001000000000     BIN</p></div>
+
+<p>Next we use the bitwise OR operation to merge them:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000dd;">1010001000000000</span> <span style="color: #000040;">|</span> <span style="color: #666666;">// 0xA200</span>
+        <span style="color: #0000dd;">11110000</span> <span style="color: #000080;">=</span> <span style="color: #666666;">// 0xF0 (0x00F0)</span>
+<span style="color: #000040;">------------------</span>
+<span style="color: #0000dd;">1010001011110000</span>   <span style="color: #666666;">// 0xA2F0</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">1010001000000000 | // 0xA200
+        11110000 = // 0xF0 (0x00F0)
+------------------
+1010001011110000   // 0xA2F0</p></div>
+
+<p><strong>Decode opcode</strong><br>
+As we have stored our current opcode, we need to decode the opcode and check the opcode table to see what it means. We will continue with the same opcode:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #208080;">0xA2F0</span> <span style="color: #666666;">// Assembly: mvi 2F0h</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">0xA2F0 // Assembly: mvi 2F0h</p></div>
+
+<p>If we take a look at the <a href="http://en.wikipedia.org/wiki/CHIP-8#Opcode_table">opcode table</a>, it tells us the following:</p>
+<ul>
+<li>ANNN: Sets I to the address NNN</li>
+</ul>
+<p>We will need to set index register I to the value of NNN (0x2F0).</p>
+<p><strong>Execute opcode</strong><br>
+Now that we know what to do with the opcode, we can execute the opcode in our emulator. For our example instruction <code>0xA2F0</code> it means that we need to store the value <code>0x2F0</code> into index register I. As only 12 bits are containing the value we need to store, we use a bitwise AND operator (&amp;) to get rid of the first four bits (nibble):</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000dd;">1010001011110000</span> <span style="color: #000040;">&amp;</span> <span style="color: #666666;">// 0xA2F0 (opcode)</span>
+<span style="color: #208080;">0000111111111111</span> <span style="color: #000080;">=</span> <span style="color: #666666;">// 0x0FFF</span>
+<span style="color: #000040;">------------------</span>
+<span style="color: #208080;">0000001011110000</span>   <span style="color: #666666;">// 0x02F0 (0x2F0)</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">1010001011110000 &amp; // 0xA2F0 (opcode)
+0000111111111111 = // 0x0FFF
+------------------
+0000001011110000   // 0x02F0 (0x2F0)</p></div>
+
+<p>Resulting code:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;">I <span style="color: #000080;">=</span> opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0FFF</span><span style="color: #008080;">;</span>
+pc <span style="color: #000040;">+</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">2</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">I = opcode &amp; 0x0FFF;
+pc += 2;</p></div>
+
+<p>Because every instruction is 2 bytes long, we need to increment the program counter by two after every executed opcode. This is true unless you jump to a certain address in the memory or if you call a subroutine (in which case you need to store the program counter in the stack). If the next opcode should be skipped, increase the program counter by four.</p>
+<p><strong>Timers</strong><br>
+Besides executing opcodes, the Chip 8 also has two timers you will need to implement. As mentioned above, both timers (delay timer and sound timer) count down to zero if they have been set to a value larger than zero. Since these timers count down at 60 Hz, you might want to implement something that slows down your emulation cycle (Execute 60 opcodes in one second).</p>
+<h3>Getting started</h3>
+<p>Now that you know the basics of emulation and how the system works, it is time to put all pieces together and start coding the emulator.</p>
+<p><strong>Initialize system</strong><br>
+Before running the first emulation cycle, you will need to prepare your system state. Start clearing the memory and resetting the registers to zero. While the Chip 8 doesn’t really have a <a href="http://en.wikipedia.org/wiki/BIOS">BIOS</a> or firmware, it does have a basic fontset stored in the memory. This fontset should be loaded in memory location <code>0x50 == 80</code> and onwards. More details about how the fontset works can be found at the end of this guide.<br>
+Another important thing to remember is that the system expects the application to be loaded at memory location <code>0x200</code>. This means that your program counter should also be set to this location.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">void</span> chip8<span style="color: #008080;">::</span><span style="color: #007788;">initialize</span><span style="color: #008000;">(</span><span style="color: #008000;">)</span>
+<span style="color: #008000;">{</span>
+  pc     <span style="color: #000080;">=</span> <span style="color: #208080;">0x200</span><span style="color: #008080;">;</span>  <span style="color: #666666;">// Program counter starts at 0x200</span>
+  opcode <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span>      <span style="color: #666666;">// Reset current opcode	</span>
+  I      <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span>      <span style="color: #666666;">// Reset index register</span>
+  sp     <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span>      <span style="color: #666666;">// Reset stack pointer</span>
+&nbsp;
+  <span style="color: #666666;">// Clear display	</span>
+  <span style="color: #666666;">// Clear stack</span>
+  <span style="color: #666666;">// Clear registers V0-VF</span>
+  <span style="color: #666666;">// Clear memory</span>
+&nbsp;
+  <span style="color: #666666;">// Load fontset</span>
+  <span style="color: #0000ff;">for</span><span style="color: #008000;">(</span><span style="color: #0000ff;">int</span> i <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span> i <span style="color: #000080;">&lt;</span> <span style="color: #0000dd;">80</span><span style="color: #008080;">;</span> <span style="color: #000040;">++</span>i<span style="color: #008000;">)</span>
+    memory<span style="color: #008000;">[</span>i<span style="color: #008000;">]</span> <span style="color: #000080;">=</span> chip8_fontset<span style="color: #008000;">[</span>i<span style="color: #008000;">]</span><span style="color: #008080;">;</span>		
+&nbsp;
+  <span style="color: #666666;">// Reset timers</span>
+<span style="color: #008000;">}</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">void chip8::initialize()
+{
+  pc     = 0x200;  // Program counter starts at 0x200
+  opcode = 0;      // Reset current opcode	
+  I      = 0;      // Reset index register
+  sp     = 0;      // Reset stack pointer
+
+  // Clear display	
+  // Clear stack
+  // Clear registers V0-VF
+  // Clear memory
+
+  // Load fontset
+  for(int i = 0; i &lt; 80; ++i)
+    memory[i] = chip8_fontset[i];		
+
+  // Reset timers
+}</p></div>
+
+<p><strong>Loading the program into the memory</strong><br>
+After you have initialized the emulator, load the program into the memory (use fopen in binary mode) and start filling the memory at location: <code>0x200 == 512</code>.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">for</span><span style="color: #008000;">(</span><span style="color: #0000ff;">int</span> i <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span> i <span style="color: #000080;">&lt;</span> bufferSize<span style="color: #008080;">;</span> <span style="color: #000040;">++</span>i<span style="color: #008000;">)</span>
+  memory<span style="color: #008000;">[</span>i <span style="color: #000040;">+</span> <span style="color: #0000dd;">512</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> buffer<span style="color: #008000;">[</span>i<span style="color: #008000;">]</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">for(int i = 0; i &lt; bufferSize; ++i)
+  memory[i + 512] = buffer[i];</p></div>
+
+<p><strong>Start the emulation</strong><br>
+Our system is now ready to execute its first opcode. As mentioned above, we should fetch, decode and execute the opcode. In this example we start by reading the first 4 bits of the current opcode to find out what the opcode is and what the emulator needs to do:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">void</span> chip8<span style="color: #008080;">::</span><span style="color: #007788;">emulateCycle</span><span style="color: #008000;">(</span><span style="color: #008000;">)</span>
+<span style="color: #008000;">{</span>
+  <span style="color: #666666;">// Fetch opcode</span>
+  opcode <span style="color: #000080;">=</span> memory<span style="color: #008000;">[</span>pc<span style="color: #008000;">]</span> <span style="color: #000080;">&lt;&lt;</span> <span style="color: #0000dd;">8</span> <span style="color: #000040;">|</span> memory<span style="color: #008000;">[</span>pc <span style="color: #000040;">+</span> <span style="color: #0000dd;">1</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span>
+&nbsp;
+  <span style="color: #666666;">// Decode opcode</span>
+  <span style="color: #0000ff;">switch</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0xF000</span><span style="color: #008000;">)</span>
+  <span style="color: #008000;">{</span>    
+    <span style="color: #666666;">// Some opcodes //</span>
+&nbsp;
+    <span style="color: #0000ff;">case</span> <span style="color: #208080;">0xA000</span><span style="color: #008080;">:</span> <span style="color: #666666;">// ANNN: Sets I to the address NNN</span>
+      <span style="color: #666666;">// Execute opcode</span>
+      I <span style="color: #000080;">=</span> opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0FFF</span><span style="color: #008080;">;</span>
+      pc <span style="color: #000040;">+</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">2</span><span style="color: #008080;">;</span>
+    <span style="color: #0000ff;">break</span><span style="color: #008080;">;</span>
+&nbsp;
+    <span style="color: #666666;">// More opcodes //</span>
+&nbsp;
+    <span style="color: #0000ff;">default</span><span style="color: #008080;">:</span>
+      <span style="color: #0000dd;">printf</span> <span style="color: #008000;">(</span><span style="color: #FF0000;">"Unknown opcode: 0x%X<span style="color: #000099; font-weight: bold;">\n</span>"</span>, opcode<span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+  <span style="color: #008000;">}</span>  
+&nbsp;
+  <span style="color: #666666;">// Update timers</span>
+  <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span>delay_timer <span style="color: #000080;">&gt;</span> <span style="color: #0000dd;">0</span><span style="color: #008000;">)</span>
+    <span style="color: #000040;">--</span>delay_timer<span style="color: #008080;">;</span>
+&nbsp;
+  <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span>sound_timer <span style="color: #000080;">&gt;</span> <span style="color: #0000dd;">0</span><span style="color: #008000;">)</span>
+  <span style="color: #008000;">{</span>
+    <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span>sound_timer <span style="color: #000080;">==</span> <span style="color: #0000dd;">1</span><span style="color: #008000;">)</span>
+      <span style="color: #0000dd;">printf</span><span style="color: #008000;">(</span><span style="color: #FF0000;">"BEEP!<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #008000;">)</span><span style="color: #008080;">;</span>
+    <span style="color: #000040;">--</span>sound_timer<span style="color: #008080;">;</span>
+  <span style="color: #008000;">}</span>  
+<span style="color: #008000;">}</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">void chip8::emulateCycle()
+{
+  // Fetch opcode
+  opcode = memory[pc] &lt;&lt; 8 | memory[pc + 1];
+
+  // Decode opcode
+  switch(opcode &amp; 0xF000)
+  {    
+    // Some opcodes //
+
+    case 0xA000: // ANNN: Sets I to the address NNN
+      // Execute opcode
+      I = opcode &amp; 0x0FFF;
+      pc += 2;
+    break;
+
+    // More opcodes //
+
+    default:
+      printf ("Unknown opcode: 0x%X\n", opcode);
+  }  
+
+  // Update timers
+  if(delay_timer &gt; 0)
+    --delay_timer;
+
+  if(sound_timer &gt; 0)
+  {
+    if(sound_timer == 1)
+      printf("BEEP!\n");
+    --sound_timer;
+  }  
+}</p></div>
+
+<p>In some cases we can not rely solely on the first four bits to see what the opcode means. For example, <code>0x00E0</code> and <code>0x00EE</code> both start with <code>0x0</code>. In this case we add an additional switch and compare the last four bits:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #666666;">// Decode opcode</span>
+<span style="color: #0000ff;">switch</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0xF000</span><span style="color: #008000;">)</span>
+<span style="color: #008000;">{</span>    
+  <span style="color: #0000ff;">case</span> <span style="color: #208080;">0x0000</span><span style="color: #008080;">:</span>
+    <span style="color: #0000ff;">switch</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x000F</span><span style="color: #008000;">)</span>
+    <span style="color: #008000;">{</span>
+      <span style="color: #0000ff;">case</span> <span style="color: #208080;">0x0000</span><span style="color: #008080;">:</span> <span style="color: #666666;">// 0x00E0: Clears the screen        </span>
+        <span style="color: #666666;">// Execute opcode</span>
+      <span style="color: #0000ff;">break</span><span style="color: #008080;">;</span>
+&nbsp;
+      <span style="color: #0000ff;">case</span> <span style="color: #208080;">0x000E</span><span style="color: #008080;">:</span> <span style="color: #666666;">// 0x00EE: Returns from subroutine          </span>
+        <span style="color: #666666;">// Execute opcode</span>
+      <span style="color: #0000ff;">break</span><span style="color: #008080;">;</span>
+&nbsp;
+      <span style="color: #0000ff;">default</span><span style="color: #008080;">:</span>
+        <span style="color: #0000dd;">printf</span> <span style="color: #008000;">(</span><span style="color: #FF0000;">"Unknown opcode [0x0000]: 0x%X<span style="color: #000099; font-weight: bold;">\n</span>"</span>, opcode<span style="color: #008000;">)</span><span style="color: #008080;">;</span>          
+    <span style="color: #008000;">}</span>
+  <span style="color: #0000ff;">break</span><span style="color: #008080;">;</span>
+&nbsp;
+  <span style="color: #666666;">// more opcodes //</span>
+<span style="color: #008000;">}</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">// Decode opcode
+switch(opcode &amp; 0xF000)
+{    
+  case 0x0000:
+    switch(opcode &amp; 0x000F)
+    {
+      case 0x0000: // 0x00E0: Clears the screen        
+        // Execute opcode
+      break;
+
+      case 0x000E: // 0x00EE: Returns from subroutine          
+        // Execute opcode
+      break;
+
+      default:
+        printf ("Unknown opcode [0x0000]: 0x%X\n", opcode);          
+    }
+  break;
+
+  // more opcodes //
+}</p></div>
+
+<h3>Opcode examples</h3>
+<p>Lets take a look at some more opcodes that might look daunting at first.</p>
+<p><strong>Example 1: Opcode <code>0x2NNN</code></strong><br>
+This opcode calls the subroutine at address NNN. Because we will need to temporary jump to address NNN, it means that we should store the current address of the program counter in the stack. After storing the value of the program counter in the stack, increase the stack pointer to prevent overwriting the current stack. Now that we have stored the program counter, we can set it to the address NNN. Remember, because we’re calling a subroutine at a specific address, you should not increase the program counter by two.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">case</span> <span style="color: #208080;">0x2000</span><span style="color: #008080;">:</span>
+  stack<span style="color: #008000;">[</span>sp<span style="color: #008000;">]</span> <span style="color: #000080;">=</span> pc<span style="color: #008080;">;</span>
+  <span style="color: #000040;">++</span>sp<span style="color: #008080;">;</span>
+  pc <span style="color: #000080;">=</span> opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0FFF</span><span style="color: #008080;">;</span>
+<span style="color: #0000ff;">break</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">case 0x2000:
+  stack[sp] = pc;
+  ++sp;
+  pc = opcode &amp; 0x0FFF;
+break;</p></div>
+
+<p><strong>Example 2: Opcode <code>0x8XY4</code></strong><br>
+This opcode adds the value of VY to VX. Register VF is set to 1 when there is a carry and set to 0 when there isn’t. Because the register can only store values from 0 to 255 (8 bit value), it means that if the sum of VX and VY is larger than 255, it can’t be stored in the register (or actually it starts counting from 0 again). If the sum of VX and VY is larger than 255, we use the carry flag to let the system know that the total sum of both values was indeed larger than 255. Don’t forget to increment the program counter by two after executing the opcode.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">case</span> <span style="color: #208080;">0x0004</span><span style="color: #008080;">:</span>       
+  <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span>V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x00F0</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">4</span><span style="color: #008000;">]</span> <span style="color: #000080;">&gt;</span> <span style="color: #008000;">(</span><span style="color: #208080;">0xFF</span> <span style="color: #000040;">-</span> V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0F00</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">8</span><span style="color: #008000;">]</span><span style="color: #008000;">)</span><span style="color: #008000;">)</span>
+    V<span style="color: #008000;">[</span><span style="color: #208080;">0xF</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #0000dd;">1</span><span style="color: #008080;">;</span> <span style="color: #666666;">//carry</span>
+  <span style="color: #0000ff;">else</span>
+    V<span style="color: #008000;">[</span><span style="color: #208080;">0xF</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span>
+  V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0F00</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">8</span><span style="color: #008000;">]</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x00F0</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">4</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span>
+  pc <span style="color: #000040;">+</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">2</span><span style="color: #008080;">;</span>          
+<span style="color: #0000ff;">break</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">case 0x0004:       
+  if(V[(opcode &amp; 0x00F0) &gt;&gt; 4] &gt; (0xFF - V[(opcode &amp; 0x0F00) &gt;&gt; 8]))
+    V[0xF] = 1; //carry
+  else
+    V[0xF] = 0;
+  V[(opcode &amp; 0x0F00) &gt;&gt; 8] += V[(opcode &amp; 0x00F0) &gt;&gt; 4];
+  pc += 2;          
+break;</p></div>
+
+<p><strong>Example 3: Opcode <code>0xFX33</code></strong><br>
+Stores the Binary-coded decimal representation of VX at the addresses I, I plus 1, and I plus 2</p>
+<p>I have to confess that I couldn’t to figure out how to implement this opcode, so I used <a href="https://multigesture.net/wp-content/uploads/mirror/goldroad/chip8.shtml">TJA’s solution</a>.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">case</span> <span style="color: #208080;">0x0033</span><span style="color: #008080;">:</span>
+  memory<span style="color: #008000;">[</span>I<span style="color: #008000;">]</span>     <span style="color: #000080;">=</span> V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0F00</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">8</span><span style="color: #008000;">]</span> <span style="color: #000040;">/</span> <span style="color: #0000dd;">100</span><span style="color: #008080;">;</span>
+  memory<span style="color: #008000;">[</span>I <span style="color: #000040;">+</span> <span style="color: #0000dd;">1</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #008000;">(</span>V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0F00</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">8</span><span style="color: #008000;">]</span> <span style="color: #000040;">/</span> <span style="color: #0000dd;">10</span><span style="color: #008000;">)</span> <span style="color: #000040;">%</span> <span style="color: #0000dd;">10</span><span style="color: #008080;">;</span>
+  memory<span style="color: #008000;">[</span>I <span style="color: #000040;">+</span> <span style="color: #0000dd;">2</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #008000;">(</span>V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0F00</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">8</span><span style="color: #008000;">]</span> <span style="color: #000040;">%</span> <span style="color: #0000dd;">100</span><span style="color: #008000;">)</span> <span style="color: #000040;">%</span> <span style="color: #0000dd;">10</span><span style="color: #008080;">;</span>
+  pc <span style="color: #000040;">+</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">2</span><span style="color: #008080;">;</span>
+<span style="color: #0000ff;">break</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">case 0x0033:
+  memory[I]     = V[(opcode &amp; 0x0F00) &gt;&gt; 8] / 100;
+  memory[I + 1] = (V[(opcode &amp; 0x0F00) &gt;&gt; 8] / 10) % 10;
+  memory[I + 2] = (V[(opcode &amp; 0x0F00) &gt;&gt; 8] % 100) % 10;
+  pc += 2;
+break;</p></div>
+
+<h3>Handling graphics and input</h3>
+<p><strong>Drawing pixels</strong><br>
+The opcode responsible for drawing to our display is <code>0xDXYN</code>. The Wikipedia description tells us the following:</p>
+<ul>
+<li>Draws a sprite at coordinate (VX, VY) that has a width of 8 pixels and a height of N pixels. Each row of 8 pixels is read as bit-coded starting from memory location I; I value doesn’t change after the execution of this instruction. As described above, VF is set to 1 if any screen pixels are flipped from set to unset when the sprite is drawn, and to 0 if that doesn’t happen.</li>
+</ul>
+<p>As the description of the opcode is telling us, the Chip 8 actually draws on the screen by drawing sprites. It will give us the location of where the sprite needs to be drawn (the opcode tells us which V register we need to check to fetch the X and Y coordinates) and the number of rows (N). The width of each sprite is fixed (8 bits / 1 byte). The state of each pixel is set by using a bitwise XOR operation. This means that it will compare the current pixel state with the current value in the memory. If the current value is different from the value in the memory, the bit value will be 1. If both values match, the bit value will be 0.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #208080;">01000101</span> <span style="color: #000040;">^</span>
+<span style="color: #0000dd;">11110011</span> <span style="color: #000080;">=</span>
+<span style="color: #000040;">----------</span>
+<span style="color: #0000dd;">10110110</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">01000101 ^
+11110011 =
+----------
+10110110</p></div>
+
+<p>Lets assume it the opcode was <code>0xD003</code>. This means it wants to draw a sprite at location 0,0 which is 3 rows high. At memory location I, the following values were set:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;">memory<span style="color: #008000;">[</span>I<span style="color: #008000;">]</span>     <span style="color: #000080;">=</span> <span style="color: #208080;">0x3C</span><span style="color: #008080;">;</span>
+memory<span style="color: #008000;">[</span>I <span style="color: #000040;">+</span> <span style="color: #0000dd;">1</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #208080;">0xC3</span><span style="color: #008080;">;</span>
+memory<span style="color: #008000;">[</span>I <span style="color: #000040;">+</span> <span style="color: #0000dd;">2</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #208080;">0xFF</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">memory[I]     = 0x3C;
+memory[I + 1] = 0xC3;
+memory[I + 2] = 0xFF;</p></div>
+
+<p>How do these 3 bytes represent a sprite? Take a look at the binary values of each byte:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;">HEX    BIN        Sprite
+<span style="color: #208080;">0x3C</span>   <span style="color: #208080;">00111100</span>     <span style="color: #000040;">****</span>
+<span style="color: #208080;">0xC3</span>   <span style="color: #0000dd;">11000011</span>   <span style="color: #000040;">**</span>    <span style="color: #000040;">**</span>
+<span style="color: #208080;">0xFF</span>   <span style="color: #0000dd;">11111111</span>   <span style="color: #000040;">********</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">HEX    BIN        Sprite
+0x3C   00111100     ****
+0xC3   11000011   **    **
+0xFF   11111111   ********</p></div>
+
+<p>You should use the binary representation to fill your array (<code>gfx[]</code>). However, before setting the value in <code>gfx[]</code> using the XOR operator, you will also need to check if any of the pixels changed from 1 to 0. If this is the case, you should set the VF register to 1 (This is basically a test for collision detection).</p>
+<p>Example of the implementation of opcode <code>0xDXYN</code></p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="line_numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">case</span> <span style="color: #208080;">0xD000</span><span style="color: #008080;">:</span>		   
+<span style="color: #008000;">{</span>
+  <span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> x <span style="color: #000080;">=</span> V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0F00</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">8</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span>
+  <span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> y <span style="color: #000080;">=</span> V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x00F0</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">4</span><span style="color: #008000;">]</span><span style="color: #008080;">;</span>
+  <span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> height <span style="color: #000080;">=</span> opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x000F</span><span style="color: #008080;">;</span>
+  <span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">short</span> pixel<span style="color: #008080;">;</span>
+&nbsp;
+  V<span style="color: #008000;">[</span><span style="color: #208080;">0xF</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span>
+  <span style="color: #0000ff;">for</span> <span style="color: #008000;">(</span><span style="color: #0000ff;">int</span> yline <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span> yline <span style="color: #000080;">&lt;</span> height<span style="color: #008080;">;</span> yline<span style="color: #000040;">++</span><span style="color: #008000;">)</span>
+  <span style="color: #008000;">{</span>
+    pixel <span style="color: #000080;">=</span> memory<span style="color: #008000;">[</span>I <span style="color: #000040;">+</span> yline<span style="color: #008000;">]</span><span style="color: #008080;">;</span>
+    <span style="color: #0000ff;">for</span><span style="color: #008000;">(</span><span style="color: #0000ff;">int</span> xline <span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008080;">;</span> xline <span style="color: #000080;">&lt;</span> <span style="color: #0000dd;">8</span><span style="color: #008080;">;</span> xline<span style="color: #000040;">++</span><span style="color: #008000;">)</span>
+    <span style="color: #008000;">{</span>
+      <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span><span style="color: #008000;">(</span>pixel <span style="color: #000040;">&amp;</span> <span style="color: #008000;">(</span><span style="color: #208080;">0x80</span> <span style="color: #000080;">&gt;&gt;</span> xline<span style="color: #008000;">)</span><span style="color: #008000;">)</span> <span style="color: #000040;">!</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008000;">)</span>
+      <span style="color: #008000;">{</span>
+        <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span>gfx<span style="color: #008000;">[</span><span style="color: #008000;">(</span>x <span style="color: #000040;">+</span> xline <span style="color: #000040;">+</span> <span style="color: #008000;">(</span><span style="color: #008000;">(</span>y <span style="color: #000040;">+</span> yline<span style="color: #008000;">)</span> <span style="color: #000040;">*</span> <span style="color: #0000dd;">64</span><span style="color: #008000;">)</span><span style="color: #008000;">)</span><span style="color: #008000;">]</span> <span style="color: #000080;">==</span> <span style="color: #0000dd;">1</span><span style="color: #008000;">)</span>
+          V<span style="color: #008000;">[</span><span style="color: #208080;">0xF</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span> <span style="color: #0000dd;">1</span><span style="color: #008080;">;</span>                                 
+        gfx<span style="color: #008000;">[</span>x <span style="color: #000040;">+</span> xline <span style="color: #000040;">+</span> <span style="color: #008000;">(</span><span style="color: #008000;">(</span>y <span style="color: #000040;">+</span> yline<span style="color: #008000;">)</span> <span style="color: #000040;">*</span> <span style="color: #0000dd;">64</span><span style="color: #008000;">)</span><span style="color: #008000;">]</span> <span style="color: #000040;">^</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">1</span><span style="color: #008080;">;</span>
+      <span style="color: #008000;">}</span>
+    <span style="color: #008000;">}</span>
+  <span style="color: #008000;">}</span>
+&nbsp;
+  drawFlag <span style="color: #000080;">=</span> <span style="color: #0000ff;">true</span><span style="color: #008080;">;</span>
+  pc <span style="color: #000040;">+</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">2</span><span style="color: #008080;">;</span>
+<span style="color: #008000;">}</span>
+<span style="color: #0000ff;">break</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">case 0xD000:		   
+{
+  unsigned short x = V[(opcode &amp; 0x0F00) &gt;&gt; 8];
+  unsigned short y = V[(opcode &amp; 0x00F0) &gt;&gt; 4];
+  unsigned short height = opcode &amp; 0x000F;
+  unsigned short pixel;
+
+  V[0xF] = 0;
+  for (int yline = 0; yline &lt; height; yline++)
+  {
+    pixel = memory[I + yline];
+    for(int xline = 0; xline &lt; 8; xline++)
+    {
+      if((pixel &amp; (0x80 &gt;&gt; xline)) != 0)
+      {
+        if(gfx[(x + xline + ((y + yline) * 64))] == 1)
+          V[0xF] = 1;                                 
+        gfx[x + xline + ((y + yline) * 64)] ^= 1;
+      }
+    }
+  }
+
+  drawFlag = true;
+  pc += 2;
+}
+break;</p></div>
+
+<ul>
+<li>Line 3-4: Fetch the position and height of the sprite</li>
+<li>Line 5: Pixel value</li>
+<li>Line 8: Reset register VF</li>
+<li>Line 9: Loop over each row</li>
+<li>Line 11: Fetch the pixel value from the memory starting at location I</li>
+<li>Line 12: Loop over 8 bits of one row</li>
+<li>Line 14: Check if the current evaluated pixel is set to 1 (note that <code>0x80 &gt;&gt; xline</code> scan through the byte, one bit at the time)</li>
+<li>Line 16-17: Check if the pixel on the display is set to 1. If it is set, we need to register the collision by setting the VF register</li>
+<li>Line 18: Set the pixel value by using XOR</li>
+<li>Line 23: We changed our <code>gfx[]</code> array and thus need to update the screen.</li>
+<li>Line 24: Update the program counter to move to the next opcode</li>
+</ul>
+<p><strong>Input</strong><br>
+The Chip 8 system uses a simple HEX keypad that allows users to interact with the system. For our emulator this means we need to implement a method that will set the state of each key in the variable that handles the key states. Every cycle you should check the key input state and store it in <code>key[]</code>.</p>
+<p>It actually doesn’t matter what value you store, because opcode <code>0xEX9E</code> and <code>0xEXA1</code> only check if a certain key is pressed or isn’t pressed. Opcode <code>0xFX0A</code> only waits for a key press, and when it receives one, it stores the key name in the register and not the key state.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">case</span> <span style="color: #208080;">0xE000</span><span style="color: #008080;">:</span>
+  <span style="color: #0000ff;">switch</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x00FF</span><span style="color: #008000;">)</span>
+  <span style="color: #008000;">{</span>
+    <span style="color: #666666;">// EX9E: Skips the next instruction </span>
+    <span style="color: #666666;">// if the key stored in VX is pressed</span>
+    <span style="color: #0000ff;">case</span> <span style="color: #208080;">0x009E</span><span style="color: #008080;">:</span>
+      <span style="color: #0000ff;">if</span><span style="color: #008000;">(</span>key<span style="color: #008000;">[</span>V<span style="color: #008000;">[</span><span style="color: #008000;">(</span>opcode <span style="color: #000040;">&amp;</span> <span style="color: #208080;">0x0F00</span><span style="color: #008000;">)</span> <span style="color: #000080;">&gt;&gt;</span> <span style="color: #0000dd;">8</span><span style="color: #008000;">]</span><span style="color: #008000;">]</span> <span style="color: #000040;">!</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">0</span><span style="color: #008000;">)</span>
+        pc <span style="color: #000040;">+</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">4</span><span style="color: #008080;">;</span>
+      <span style="color: #0000ff;">else</span>
+        pc <span style="color: #000040;">+</span><span style="color: #000080;">=</span> <span style="color: #0000dd;">2</span><span style="color: #008080;">;</span>
+    <span style="color: #0000ff;">break</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">case 0xE000:
+  switch(opcode &amp; 0x00FF)
+  {
+    // EX9E: Skips the next instruction 
+    // if the key stored in VX is pressed
+    case 0x009E:
+      if(key[V[(opcode &amp; 0x0F00) &gt;&gt; 8]] != 0)
+        pc += 4;
+      else
+        pc += 2;
+    break;</p></div>
+
+<p>Below you’ll find an example of the original keypad layout. It does not really matter how you implement the key mapping, but I suggest something as on the right side.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;">Keypad                   Keyboard
+<span style="color: #000040;">+-+-+-+-+</span>                <span style="color: #000040;">+-+-+-+-+</span>
+<span style="color: #000040;">|</span><span style="color: #0000dd;">1</span><span style="color: #000040;">|</span><span style="color: #0000dd;">2</span><span style="color: #000040;">|</span><span style="color: #0000dd;">3</span><span style="color: #000040;">|</span>C<span style="color: #000040;">|</span>                <span style="color: #000040;">|</span><span style="color: #0000dd;">1</span><span style="color: #000040;">|</span><span style="color: #0000dd;">2</span><span style="color: #000040;">|</span><span style="color: #0000dd;">3</span><span style="color: #000040;">|</span><span style="color: #0000dd;">4</span><span style="color: #000040;">|</span>
+<span style="color: #000040;">+-+-+-+-+</span>                <span style="color: #000040;">+-+-+-+-+</span>
+<span style="color: #000040;">|</span><span style="color: #0000dd;">4</span><span style="color: #000040;">|</span><span style="color: #0000dd;">5</span><span style="color: #000040;">|</span><span style="color: #0000dd;">6</span><span style="color: #000040;">|</span>D<span style="color: #000040;">|</span>                <span style="color: #000040;">|</span>Q<span style="color: #000040;">|</span>W<span style="color: #000040;">|</span>E<span style="color: #000040;">|</span>R<span style="color: #000040;">|</span>
+<span style="color: #000040;">+-+-+-+-+</span>       <span style="color: #000080;">=&gt;</span>       <span style="color: #000040;">+-+-+-+-+</span>
+<span style="color: #000040;">|</span><span style="color: #0000dd;">7</span><span style="color: #000040;">|</span><span style="color: #0000dd;">8</span><span style="color: #000040;">|</span><span style="color: #0000dd;">9</span><span style="color: #000040;">|</span>E<span style="color: #000040;">|</span>                <span style="color: #000040;">|</span>A<span style="color: #000040;">|</span>S<span style="color: #000040;">|</span>D<span style="color: #000040;">|</span>F<span style="color: #000040;">|</span>
+<span style="color: #000040;">+-+-+-+-+</span>                <span style="color: #000040;">+-+-+-+-+</span>
+<span style="color: #000040;">|</span>A<span style="color: #000040;">|</span><span style="color: #0000dd;">0</span><span style="color: #000040;">|</span>B<span style="color: #000040;">|</span>F<span style="color: #000040;">|</span>                <span style="color: #000040;">|</span>Z<span style="color: #000040;">|</span>X<span style="color: #000040;">|</span>C<span style="color: #000040;">|</span>V<span style="color: #000040;">|</span>
+<span style="color: #000040;">+-+-+-+-+</span>                <span style="color: #000040;">+-+-+-+-+</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">Keypad                   Keyboard
++-+-+-+-+                +-+-+-+-+
+|1|2|3|C|                |1|2|3|4|
++-+-+-+-+                +-+-+-+-+
+|4|5|6|D|                |Q|W|E|R|
++-+-+-+-+       =&gt;       +-+-+-+-+
+|7|8|9|E|                |A|S|D|F|
++-+-+-+-+                +-+-+-+-+
+|A|0|B|F|                |Z|X|C|V|
++-+-+-+-+                +-+-+-+-+</p></div>
+
+<h3>CHIP-8 fontset</h3>
+<p>This is the Chip 8 font set. Each number or character is 4 pixels wide and 5 pixel high.</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #0000ff;">unsigned</span> <span style="color: #0000ff;">char</span> chip8_fontset<span style="color: #008000;">[</span><span style="color: #0000dd;">80</span><span style="color: #008000;">]</span> <span style="color: #000080;">=</span>
+<span style="color: #008000;">{</span> 
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// 0</span>
+  <span style="color: #208080;">0x20</span>, <span style="color: #208080;">0x60</span>, <span style="color: #208080;">0x20</span>, <span style="color: #208080;">0x20</span>, <span style="color: #208080;">0x70</span>, <span style="color: #666666;">// 1</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x10</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// 2</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x10</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x10</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// 3</span>
+  <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x10</span>, <span style="color: #208080;">0x10</span>, <span style="color: #666666;">// 4</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x10</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// 5</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// 6</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x10</span>, <span style="color: #208080;">0x20</span>, <span style="color: #208080;">0x40</span>, <span style="color: #208080;">0x40</span>, <span style="color: #666666;">// 7</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// 8</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x10</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// 9</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0x90</span>, <span style="color: #666666;">// A</span>
+  <span style="color: #208080;">0xE0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xE0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xE0</span>, <span style="color: #666666;">// B</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// C</span>
+  <span style="color: #208080;">0xE0</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0x90</span>, <span style="color: #208080;">0xE0</span>, <span style="color: #666666;">// D</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #666666;">// E</span>
+  <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0xF0</span>, <span style="color: #208080;">0x80</span>, <span style="color: #208080;">0x80</span>  <span style="color: #666666;">// F</span>
+<span style="color: #008000;">}</span><span style="color: #008080;">;</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">unsigned char chip8_fontset[80] =
+{ 
+  0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+  0x20, 0x60, 0x20, 0x20, 0x70, // 1
+  0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+  0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+  0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+  0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+  0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+  0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+  0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+  0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+  0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+  0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+  0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+  0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+  0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+  0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+};</p></div>
+
+<p>It might look just like an array of random numbers, but take a close look at the following:</p>
+
+<div class="wp_syntax" style="position:relative;"><table><tbody><tr><td class="code"><pre class="cpp" style="font-family:monospace;">DEC   HEX    BIN         RESULT    DEC   HEX    BIN         RESULT
+<span style="color: #0000dd;">240</span>   <span style="color: #208080;">0xF0</span>   <span style="color: #0000dd;">1111</span> <span style="color: #208080;">0000</span>    <span style="color: #000040;">****</span>     <span style="color: #0000dd;">240</span>   <span style="color: #208080;">0xF0</span>   <span style="color: #0000dd;">1111</span> <span style="color: #208080;">0000</span>    <span style="color: #000040;">****</span>
+<span style="color: #0000dd;">144</span>   <span style="color: #208080;">0x90</span>   <span style="color: #0000dd;">1001</span> <span style="color: #208080;">0000</span>    <span style="color: #000040;">*</span>  <span style="color: #000040;">*</span>      <span style="color: #0000dd;">16</span>   <span style="color: #208080;">0x10</span>   <span style="color: #208080;">0001</span> <span style="color: #208080;">0000</span>       <span style="color: #000040;">*</span>
+<span style="color: #0000dd;">144</span>   <span style="color: #208080;">0x90</span>   <span style="color: #0000dd;">1001</span> <span style="color: #208080;">0000</span>    <span style="color: #000040;">*</span>  <span style="color: #000040;">*</span>      <span style="color: #0000dd;">32</span>   <span style="color: #208080;">0x20</span>   <span style="color: #208080;">0010</span> <span style="color: #208080;">0000</span>      <span style="color: #000040;">*</span>
+<span style="color: #0000dd;">144</span>   <span style="color: #208080;">0x90</span>   <span style="color: #0000dd;">1001</span> <span style="color: #208080;">0000</span>    <span style="color: #000040;">*</span>  <span style="color: #000040;">*</span>      <span style="color: #0000dd;">64</span>   <span style="color: #208080;">0x40</span>   <span style="color: #208080;">0100</span> <span style="color: #208080;">0000</span>     <span style="color: #000040;">*</span>
+<span style="color: #0000dd;">240</span>   <span style="color: #208080;">0xF0</span>   <span style="color: #0000dd;">1111</span> <span style="color: #208080;">0000</span>    <span style="color: #000040;">****</span>      <span style="color: #0000dd;">64</span>   <span style="color: #208080;">0x40</span>   <span style="color: #208080;">0100</span> <span style="color: #208080;">0000</span>     <span style="color: #000040;">*</span></pre></td></tr></tbody></table><p class="theCode" style="display:none;">DEC   HEX    BIN         RESULT    DEC   HEX    BIN         RESULT
+240   0xF0   1111 0000    ****     240   0xF0   1111 0000    ****
+144   0x90   1001 0000    *  *      16   0x10   0001 0000       *
+144   0x90   1001 0000    *  *      32   0x20   0010 0000      *
+144   0x90   1001 0000    *  *      64   0x40   0100 0000     *
+240   0xF0   1111 0000    ****      64   0x40   0100 0000     *</p></div>
+
+<p>Look at the left example were we are drawing the number 0. As you can see it see it consists out of 5 values. Of every value, we use the binary representation to draw. Note that only the first four bits (nibble) are used for drawing a number or character.</p>
+<p><a class="thickbox" title="Keypad test application using inbuilt fonts" href="https://multigesture.net/wp-content/uploads/2011/03/keypad_test.jpg"><img loading="lazy" class="size-medium wp-image-1700 aligncenter" title="Keypad test application" alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/keypad_test-300x150.jpg" width="300" height="150" srcset="https://multigesture.net/wp-content/uploads/2011/03/keypad_test-300x150.jpg 300w, https://multigesture.net/wp-content/uploads/2011/03/keypad_test.jpg 640w" sizes="(max-width: 300px) 100vw, 300px"></a></p>
+<h3>Conclusion</h3>
+<p>Hopefully this guide provided you enough information to get you started with your own emulator project. At least you should now have a basic understanding of how emulation works and perhaps a better understanding of how a CPU executes opcodes.</p>
+<p>I have included my own implementation of a Chip 8 interpreter below which you can use as a reference. The zip file contains a binary for Windows but also includes the full source code of the emulator. Because the full source code is supplied, I recommend only looking at <code>chip8.cpp</code> file as a last resort to see how I implemented a particular opcode. The file <code>chip8.h</code> and <code>main.cpp</code> should be safe to view without spoiling too much. Actually, <code>main.cpp</code> mostly contains GLUT code which you can reuse in other (non-emulator related) projects as well.</p>
+<ul>
+<li><a class="download-link" title="" href="https://multigesture.net/download/2677/" rel="nofollow">
+	myChip8	(31009 downloads)
+</a> – Latest (Windows binary + Source code)</li>
+<li><a href="https://multigesture.net/projects/mychip8/">Early version of myChip8 from 2003 (contains a nice debugger)</a></li>
+<li><a href="https://multigesture.net/projects/mychip8-android-port/">An Android port I did in 2008</a></li>
+</ul>
+<p>Let me know if you find this guide useful! If you have questions or think that essential parts are missing, please use the comment section 🙂 !</p>
+<p><a class="thickbox" title="Blinky" href="https://multigesture.net/wp-content/uploads/2011/03/blinky.jpg"><img loading="lazy" class="size-medium wp-image-1698 aligncenter" title="Blinky" alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/blinky-300x150.jpg" width="300" height="150" srcset="https://multigesture.net/wp-content/uploads/2011/03/blinky-300x150.jpg 300w, https://multigesture.net/wp-content/uploads/2011/03/blinky.jpg 640w" sizes="(max-width: 300px) 100vw, 300px"></a></p>
+<p><strong>Credits</strong><br>
+Special thanks to the following persons (many only known by their pseudonym) who have helped me greatly with my own emulation projects in the past and present.</p>
+<ul>
+<li>ector &amp; F|RES (<a href="http://dolphin-emu.org/">Dolphin-emu team</a>)</li>
+<li>Saqib, zenogais, Absolute0, Shadow, gigaherz, Florin, Goldfinger (<a href="http://pcsx2.net/">PCSX2 team</a>)</li>
+<li>drk||Raziel &amp; ZeZu (<a href="http://code.google.com/p/nulldc/">nullDC team</a>)</li>
+<li>Hacktarux (<a href="http://mupen64.emulation64.com/">Mupen64</a>)</li>
+<li>Muad (nSX2)</li>
+<li>pSXAuthor (<a href="http://psxemulator.gazaxian.com/">pSX</a>)</li>
+<li>Shadowprince, Linker, Aprentice, SculleatR, ShizZy, Dave2001</li>
+</ul>
+<h3>Suggestions</h3>
+<p>After you have completed your first Chip 8 emulator, you might want to try one of the following things:</p>
+<ul>
+<li>Add Super CHIP-8 Opcodes</li>
+<li>Use <a href="https://multigesture.net/wp-content/uploads/mirror/zenogais/FunctionPointers.htm">function pointers</a> instead of a giant switch statement</li>
+<li>Improve graphics by adding filters (<a href="http://en.wikipedia.org/wiki/Hqx">Hqx</a>)</li>
+<li>Port it to other platforms (Mobile?) or languages</li>
+<li>Move on to a more complex project for example emulating a <a href="http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf">Gameboy (Z80 processor)</a></li>
+</ul>
+<p><a class="thickbox" title="Space invaders on Android" href="https://multigesture.net/wp-content/uploads/2011/01/chip8-space-invaders.jpg"><img loading="lazy" class="aligncenter" title="Space invaders on Android" alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/chip8-space-invaders-300x224.jpg" width="300" height="224"></a></p>
+<h3>Resources</h3>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/CHIP-8">http://en.wikipedia.org/wiki/CHIP-8</a> – System information</li>
+<li><a href="http://devernay.free.fr/hacks/chip8/C8TECH10.HTM">Cowgod’s Chip-8 Technical Reference v1.0</a> – Recommended</li>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/goldroad/chip8.shtml">Chip8 tutorial</a> – Goldroad.co.uk (mirror)</li>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/goldroad/chip8_instruction_set.shtml">(S)Chip 8 instruction set</a> – Goldroad.co.uk (mirror)</li>
+<li><a href="http://www.pong-story.com/chip8/">David Winter’s CHIP-8 emulation page</a> – Contains some games</li>
+<li><a href="http://devernay.free.fr/hacks/chip8/schip.txt">(S)CHIP-8 instruction set overview</a> – (Erik Bryntse)</li>
+<li><a href="http://www.emutalk.net/threads/19894-Chip-8">Chip8 emulator topic on Emutalk</a></li>
+<li><a href="http://forums.ngemu.com/web-development-programming/114578-chip8-thread.html">Chip8 emulator topic on NGemu</a></li>
+</ul>
+<h3>Advanced emulator resources</h3>
+<ul>
+<li><a href="http://emubook.emulation64.com/">Zilmar’s Emubook</a>
+<ul>
+<li><a href="http://emubook.emulation64.com/cpu.htm">Emubook CPU emulation chapter</a></li>
+<li><a href="http://emubook.emulation64.com/memory.htm">Emubook memory emulation chapter</a></li>
+</ul>
+</li>
+<li>Zenogais Emulation Tutorials – (Offline, but available through <a href="http://replay.waybackmachine.org/20060107221912/http://www.zenogais.net/projects/tutorials/">Archive.org</a>)
+<ul>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/zenogais/Tutorials.htm">Zenogais’ Emulation Tutorials</a> – (mirror)
+<ul>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/zenogais/Dynamic%20Recompiler.html">Dynamic Recompiler</a> – (mirror)</li>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/zenogais/FunctionPointers.htm">Array of Function Pointers</a> – (mirror)</li>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/zenogais/EmuDoc1.htm">Introduction to Emulation Part 1</a> – (mirror)</li>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/zenogais/EmuDoc2.html">Introduction to Emulation Part 2</a> – (mirror)</li>
+<li><a href="https://multigesture.net/wp-content/uploads/mirror/zenogais/GroundWork.html">Laying the Ground For An Emulator</a> – (mirror)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+				</div>
+			</div>
+								
+				
+								
+		<div class="action clearfix">
+			<!-- I don't quite know how to change permalink url into the accepted format. It might need urlencode() function but I don't quite sure how to implement. -->
+			<div id="bookmark">
+				<h3>Bookmark &amp; Share</h3>
+				<ul class="bookmark">
+					<li><a class="reddit" href="http://reddit.com/submit?url=https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/&amp;title=How%20to%20write%20an%20emulator%20(CHIP-8%20interpreter)">Reddit</a></li>
+					<li><a class="stumbleupon" href="http://www.stumbleupon.com/submit?url=https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/&amp;title=How%20to%20write%20an%20emulator%20(CHIP-8%20interpreter)">StumbleUpon</a></li>
+					<li><a class="delicious" href="http://delicious.com/post?url=https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/&amp;title=How%20to%20write%20an%20emulator%20(CHIP-8%20interpreter)">Delicious</a></li>
+					<li><a class="technorati" href="http://technorati.com/faves?add=https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/">Technorati</a></li>
+					<li><a class="digg" href="http://digg.com/submit?phase=2&amp;url=https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/&amp;title=How%20to%20write%20an%20emulator%20(CHIP-8%20interpreter)">Digg</a></li>
+					<li><a class="float" href="http://www.designfloat.com/submit.php?url=https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/&amp;title=How%20to%20write%20an%20emulator%20(CHIP-8%20interpreter)">DesignFloat</a></li>
+				</ul>
+			</div>
+			<div id="sharing">
+				<div class="tweetmeme"><script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/button.js"></script></div>
+				<div class="facebook_share"><a name="fb_share" type="box_count" href="http://www.facebook.com/sharer.php">Share</a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script></div>
+			</div>
+		</div>
+		
+		
+<div id="comments">
+
+<h2 class="mainhead">84 Comment</h2><ol class="commentlist" <li="" id="li-comment-496125">
+		<div id="comment-496125">
+			<div class="comment-author fleft">
+				<img alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/8cec8813fb078fbc7d909b277da51261.png" srcset="https://secure.gravatar.com/avatar/8cec8813fb078fbc7d909b277da51261?s=120&amp;d=mm&amp;r=g 2x" class="avatar avatar-60 photo" height="60" width="60" loading="lazy"> 
+			</div>
+			<div class="comment-info fleft">
+				<div class="c_info">Martin Ennemoser</div>			
+								<p>Are you sure that you display opcode is correctly implemented?</p>
+<p>Take for example the rom from here (but I think it can be reproduced with you provided rom ‘pong2.c8’ as well):<br>
+<a href="https://github.com/badlogic/chip8/blob/master/roms/pong.rom" rel="nofollow ugc">https://github.com/badlogic/chip8/blob/master/roms/pong.rom</a></p>
+<p>A valid opcode is ‘DAB6’. Lets assume V[B] = 0x1e (decimal 30)</p>
+<p>This actually overflows you gfx buffer since it starts at y = 30 until y = 35. But as you know your screen just has 32 rows. I think it doesn’t crash because its a C++ program and that the memory after gfx is still unused. However, take the C# implementation from Patrick and you will see that Pong will crash as soon as you press 2 on the keyboard and the left “Pong-Bar” reaches the top of the screen.<br>
+But you can also notice it visually in your implementation because the “Pong-Bars” do not break correctly when they are overflowing the screen.</p>
+<p>To fix this, write the inner loop as:</p>
+<p>for (byte xline = 0; xline &gt; xline)) != 0) // if sprite pixel is set<br>
+                                {<br>
+                                    byte posX = (byte) ((x + xline) % WIDTH);<br>
+                                    byte posY = (byte)((y + yline) % HEIGHT);</p>
+<p>                                    ushort posPixel = (ushort) (posX + ((posY) * 64));</p>
+<p>                                    if (gfx[posPixel] == 1)<br>
+                                        V[0xF] = 1; // set vf register<br>
+                                    gfx[posPixel] ^= 1;<br>
+                                }<br>
+                            }</p>
+				<p class="meta fleft">28 Feb 2018  | <a rel="nofollow" class="comment-reply-link" href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/comment-page-2/?replytocom=496125#respond" data-commentid="496125" data-postid="1660" data-belowelement="comment-496125" data-respondelement="respond" data-replyto="Reply to Martin Ennemoser" aria-label="Reply to Martin Ennemoser">Reply</a></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+	
+	<!-- #comment-## -->
+	
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-505960">
+		<div id="comment-505960">
+			<div class="comment-author fleft">
+				<img alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/a11d2ebf6799a8156d7f52566a386542.png" srcset="https://secure.gravatar.com/avatar/a11d2ebf6799a8156d7f52566a386542?s=120&amp;d=mm&amp;r=g 2x" class="avatar avatar-60 photo" height="60" width="60" loading="lazy"> 
+			</div>
+			<div class="comment-info fleft">
+				<div class="c_info">Landon</div>			
+								<p>Hello, I’d like some clarification on a section. </p>
+<p>” Before running the first emulation cycle, you will need to prepare your system state. Start clearing the memory and resetting the registers to zero. While the Chip 8 doesn’t really have a BIOS or firmware, it does have a basic fontset stored in the memory. This fontset should be loaded in memory location 0x50 == 80 and onwards. More details about how the fontset works can be found at the end of this guide.<br>
+Another important thing to remember is that the system expects the application to be loaded at memory location 0x200. This means that your program counter should also be set to this location.”</p>
+<p>In the example you give for loading the fontset, you don’t offset memory[] by 80. However, in the example for loading the game, you do. What’s with that?</p>
+				<p class="meta fleft">24 Jun 2018  | <a rel="nofollow" class="comment-reply-link" href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/comment-page-2/?replytocom=505960#respond" data-commentid="505960" data-postid="1660" data-belowelement="comment-505960" data-respondelement="respond" data-replyto="Reply to Landon" aria-label="Reply to Landon">Reply</a></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+	
+	</li><!-- #comment-## -->
+	
+	<li class="comment even thread-even depth-1" id="li-comment-513900">
+		<div id="comment-513900">
+			<div class="comment-author fleft">
+				<img alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/1ef918b17fe5848a4a797e9a18702633.png" srcset="https://secure.gravatar.com/avatar/1ef918b17fe5848a4a797e9a18702633?s=120&amp;d=mm&amp;r=g 2x" class="avatar avatar-60 photo" height="60" width="60" loading="lazy"> 
+			</div>
+			<div class="comment-info fleft">
+				<div class="c_info">CDF</div>			
+								<p>Sprites should wrap around, so:<br>
+gfx[x + xline + ((y + yline) * 64)] ^= 1;<br>
+doesn’t work if the sprite position &gt; 64*32 – 8<br>
+part of the sprite would be outside of the array changing data from other variables (the stack in my case)</p>
+<p>gfx[(x + xline + ((y + yline) * 64)) % (64 * 32)] ^= 1;<br>
+Works</p>
+				<p class="meta fleft">15 Nov 2018  | <a rel="nofollow" class="comment-reply-link" href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/comment-page-2/?replytocom=513900#respond" data-commentid="513900" data-postid="1660" data-belowelement="comment-513900" data-respondelement="respond" data-replyto="Reply to CDF" aria-label="Reply to CDF">Reply</a></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+	
+	</li><!-- #comment-## -->
+	
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-519066">
+		<div id="comment-519066">
+			<div class="comment-author fleft">
+				<img alt="" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/184af3f46f81f10745d5a0b69e120086.png" srcset="https://secure.gravatar.com/avatar/184af3f46f81f10745d5a0b69e120086?s=120&amp;d=mm&amp;r=g 2x" class="avatar avatar-60 photo" height="60" width="60" loading="lazy"> 
+			</div>
+			<div class="comment-info fleft">
+				<div class="c_info">Prox</div>			
+								<p>Question, the article says to decode the first 4 bits of the OPCode but only uses the last 4 bits of it. why are the terms switched?</p>
+<p>0xF0 means the last 4 bits are 1111 as it represents (end&gt; 11110000  00001111 &lt;start),.</p>
+				<p class="meta fleft">01 Feb 2019  | <a rel="nofollow" class="comment-reply-link" href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/comment-page-2/?replytocom=519066#respond" data-commentid="519066" data-postid="1660" data-belowelement="comment-519066" data-respondelement="respond" data-replyto="Reply to Prox" aria-label="Reply to Prox">Reply</a></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+	
+	</li><!-- #comment-## -->
+</ol><ol class="ping">         
+  	<li id="comment-494133"><a href="https://hckrnews.wordpress.com/2018/01/21/new-top-story-on-hacker-news-how-to-write-an-emulator-chip-8-interpreter/" rel="external nofollow ugc" class="url">New top story on Hacker News: How to write an emulator (CHIP-8 interpreter) – Tech + Hckr News</a></li><!-- #comment-## -->
+         
+  	<li id="comment-494134"><a href="http://www.johnjasonfallows.com/new-top-story-on-hacker-news-how-to-write-an-emulator-chip-8-interpreter-2/" rel="external nofollow ugc" class="url">John Jason Fallows » Blog Archive New top story on Hacker News: How to write an emulator (CHIP-8 interpreter) - John Jason Fallows</a></li><!-- #comment-## -->
+         
+  	<li id="comment-494136"><a href="https://clusterassets.wordpress.com/2018/01/21/new-top-story-on-hacker-news-how-to-write-an-emulator-chip-8-interpreter/" rel="external nofollow ugc" class="url">New top story on Hacker News: How to write an emulator (CHIP-8 interpreter) – ÇlusterAssets Inc.,</a></li><!-- #comment-## -->
+         
+  	<li id="comment-520093"><a href="https://ntcore.com/?p=594" rel="external nofollow ugc" class="url">Porting a CHIP-8 emulator to Rust – NTCore</a></li><!-- #comment-## -->
+</ol><div class="comment_nav">
+	<ul>
+		<li class="alignleft"><a href="https://multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/comment-page-1/#comments">« Older Comments</a></li>
+		<li class="alignright"></li> 
+	</ul>
+</div>
+
+
+	<div id="respond">
+	<h2 class="mainhead">Leave a reply</h2>
+	
+		
+		<form action="https://multigesture.net/wp-comments-post.php" method="post" id="commentform">	
+
+			<div class="cancel-comment-reply"> <a rel="nofollow" id="cancel-comment-reply-link" href="https://multigesture.net/articles/how-to-write-an-emulator-CHIP-8-interpreter/#respond" style="display:none;">Cancel</a> </div>		
+					
+							
+				
+				<p>
+					<label for="author">Name</label>
+					<input type="text" title="Name" name="author" id="author" value="" size="22" tabindex="1">
+				</p>
+				<p>
+					<label for="email">Email</label>
+					<input type="text" title="Email" name="email" id="email" value="" size="22" tabindex="2">
+				</p>
+				<p>
+					<label for="url">URL</label>
+					<input type="text" title="Website" name="url" id="url" value="" size="22" tabindex="3">
+				</p>
+			
+							
+				
+				<p><label for="comment">Comment</label><textarea name="comment" title="Your comment..." id="message" cols="60" rows="10" tabindex="4"></textarea></p>
+				
+						
+				<input type="hidden" name="comment_post_ID" value="1660" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+				<input type="hidden" name="redirect_to" value="/articles/how-to-write-an-emulator-CHIP-8-interpreter/">		
+				<p><input class="button" name="submit" type="submit" id="submit" tabindex="5" value="Submit">
+				<br class="clear"></p>
+				<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="00ba626c81"></p><textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100" style="display: none !important;"></textarea>
+			
+		<input type="hidden" id="ak_js" name="ak_js" value="1634664931462"></form>
+		
+	</div>
+
+</div></div></div>
+
+<ul id="primary" class="sidebar"><!-- Default Sidebar -->
+				<li id="search" class="widget">
+			<h3>Search</h3>
+			<form method="get" id="searchform" action="https://multigesture.net/">
+			<div>
+				<input type="text" size="18" value="" name="s" id="s" class="input fleft" tabindex="1">
+				<input type="submit" id="ksearchsubmit" value="Search" class="button fright" tabindex="2">
+			</div>
+			<br class="clear">
+			</form>
+		</li>
+		</ul>
+<ul id="secondary" class="sidebar"><!-- User Sidebar -->
+		<li class="widget"><h3>About</h3>			<div class="textwidget"><p>I'm <a href="https://multigesture.net/about/">Laurence Muller</a> (<a href="http://www.studeren.uva.nl/msc-computational-science">M.Sc.</a>) <img src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/dutchflag2.gif" alt="Dutch flag" border="0" height="10" width="15">, a <a href="http://sdr.seas.harvard.edu/content/people">former Fellow</a> of the <a href="http://sdr.seas.harvard.edu/">Scientists' Discovery Room Lab (SDR Lab)</a> at <a href="http://www.harvard.edu/">Harvard University</a> / <a href="http://www.seas.harvard.edu/">School of Engineering and Applied Sciences (SEAS)</a>, where I worked on innovative scientific software for <a href="http://www.microsoft.com/surface/">multi-touch devices</a> and <a href="http://www.mitsubishi-megaview.com/products/rear_projection_display_cubes.html">display wall systems</a>.</p>
+<p>I'm also the founder of <a href="https://epicwindmill.com/">Epic Windmill</a>, a software company that develops apps and games for mobile devices.</p>
+<p align="center"><img src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/lauw_200px.jpg" alt="Me!" border="0"></p></div>
+		</li><li class="widget"><h3>Twitter</h3>
+<div class="rotatingtweets rotatingtweets_format_0" id="rotatingtweets_4000_scrollUp_1000_616dce854ece4" data-cycle-auto-height="calc" data-cycle-fx="scrollUp" data-cycle-pause-on-hover="true" data-cycle-timeout="4000" data-cycle-speed="1000" data-cycle-easing="swing" data-cycle-slides="div.rotatingtweet" data-cycle-log="false" style="position: relative; width: 320px; height: 147.781px; overflow: hidden;">
+	<div class="rotatingtweet" style="position: absolute; top: -147.766px; left: 0px; z-index: 10; opacity: 1; width: 320px; display: none;">
+		<p class="rtw_main">RT <a href="https://twitter.com/intent/user?screen_name=J70JDV" title="Jon Veitch" lang="en">@J70JDV</a> One of the most incredible ways to cross the Channel. Here’s Hoverspeed’s  The Princess Margaret. Apologies for the poor quality photograph! <a href="https://t.co/7aK8XILJxk" title="https://twitter.com/J70JDV/status/1449133381883674627/photo/1" class="rtw_media_link">pic.twitter.com/7aK8XILJxk</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1449695105628217346">Yesterday</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: -147.766px; left: 0px; z-index: 10; width: 320px; opacity: 1;">
+		<p class="rtw_main">Thanks for 'Androids' <a href="https://twitter.com/intent/user?screen_name=chethaase" title="Chet Haase" lang="en">@chethaase</a> that was such a delightful read and wonderful trip into Android's history!
+
+The team that created <a href="https://twitter.com/search?q=%23Android&amp;src=hash" title="#Android" class="rtw_hashtag_link">#Android</a> didn't just create a new mobile OS, they also created a career path for engineers like me.
+
+A thread 🧵 1/25 <a href="https://t.co/F3B1hKGB6v" title="https://twitter.com/LaurenceMuller/status/1441923394568658950/photo/1" class="rtw_media_link">pic.twitter.com/F3B1hKGB6v</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1441923394568658950">About 3 weeks ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: -147.766px; left: 0px; z-index: 10; width: 320px; opacity: 1;">
+		<p class="rtw_main">I had much fun messing around with Godot a while ago. It takes a bit to learn GDScript but the guides/tutorials they provide are pretty good 🎮! <a href="https://t.co/rj1m6xOpkI" title="https://twitter.com/terrycavanagh/status/1431727107017691140" class="rtw_url_link">twitter.com/terrycavanagh/…</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1431796724666978305">About 2 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: -147.766px; left: 0px; z-index: 10; width: 320px; opacity: 1;">
+		<p class="rtw_main">RT <a href="https://twitter.com/intent/user?screen_name=ismonkeyuser" title="monkeyUser" lang="en">@ismonkeyuser</a> Friday Mood <a href="https://twitter.com/search?q=%23monkeyusershorts&amp;src=hash" title="#monkeyusershorts" class="rtw_hashtag_link">#monkeyusershorts</a> <a href="https://t.co/gbeDlLqThJ" title="https://twitter.com/ismonkeyuser/status/1426173198916325378/video/1" class="rtw_media_link">pic.twitter.com/gbeDlLqThJ</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1426218371528470532">About 2 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: -147.766px; left: 0px; z-index: 10; width: 320px; opacity: 1;">
+		<p class="rtw_main">Worked on a few <a href="https://twitter.com/intent/user?screen_name=kotlin" title="Kotlin" lang="en">@kotlin</a> Multiplatform samples last week. They are showcasing how to use <a href="https://twitter.com/search?q=%23Decompose&amp;src=hash" title="#Decompose" class="rtw_hashtag_link">#Decompose</a> in a bottom navigation based app and how you can share business logic using <a href="https://twitter.com/search?q=%23MVIKotlin&amp;src=hash" title="#MVIKotlin" class="rtw_hashtag_link">#MVIKotlin</a> <a href="https://t.co/uhu7ehadTi" title="https://github.com/falcon4ever/KMM-demos" class="rtw_url_link">github.com/falcon4ever/KM…</a> The <a href="https://twitter.com/intent/user?screen_name=jetbrains" title="JetBrains" lang="en">@jetbrains</a> KMM plugin makes it very easy! <a href="https://twitter.com/search?q=%23KMM&amp;src=hash" title="#KMM" class="rtw_hashtag_link">#KMM</a> <a href="https://twitter.com/search?q=%23Android&amp;src=hash" title="#Android" class="rtw_hashtag_link">#Android</a> <a href="https://twitter.com/search?q=%23iOS&amp;src=hash" title="#iOS" class="rtw_hashtag_link">#iOS</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1419762418721464322">About 3 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: -147.766px; left: 0px; z-index: 10; width: 320px; opacity: 1;">
+		<p class="rtw_main">RT <a href="https://twitter.com/intent/user?screen_name=GergelyOrosz" title="Gergely Orosz" lang="en">@GergelyOrosz</a> When I talk about “hyped” startups in Europe where too many people want to work at, not realizing they’re being exploited, Bunq is a prime example.
+
+Below market salary, zero equity for employees. So when the company they built is worth $2B today - they see none of this upside. <a href="https://t.co/9Wife9PA4X" title="https://twitter.com/GergelyOrosz/status/1405595935820877824/photo/1" class="rtw_media_link">pic.twitter.com/9Wife9PA4X</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1405852037171060743">About 4 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: -147.766px; left: 0px; z-index: 10; width: 320px; opacity: 1;">
+		<p class="rtw_main">Like to see what your favorite Android app is doing 🔍? I wrote an article of how you can inspect the network traffic of an app using the Android emulator and <a href="https://twitter.com/intent/user?screen_name=mitmproxy" title="mitmproxy" lang="en">@mitmproxy</a> : <a href="https://t.co/YbfCxlXITt" title="https://multigesture.net/articles/inspecting-https-network-traffic-of-any-android-app/" class="rtw_url_link">multigesture.net/articles/ins…</a> <a href="https://twitter.com/search?q=%23androiddev&amp;src=hash" title="#androiddev" class="rtw_hashtag_link">#androiddev</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1390710130707161093">About 6 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: -147.766px; left: 0px; z-index: 10; width: 320px; opacity: 1;">
+		<p class="rtw_main">Annual Covid-19 Vaccine Booster Shots Likely Needed, Pfizer CEO Says" - So it's the pharmaceutical equivalent of a software subscription model 😂🙈</p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1383956613610962956">About 7 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: block; position: absolute; top: 0px; left: 0px; z-index: 11; width: 320px; opacity: 1;">
+		<p class="rtw_main">Spend some weeks creating my own virtual bike riding software using <a href="https://twitter.com/intent/user?screen_name=UnrealEngine" title="Unreal Engine" lang="en">@UnrealEngine</a>. Still WIP but it reads sensordata (Power) and turns it into speed. It also applies the slope % to the Wahoo smart biketrainer and also reads Cadence/Heartrate sensordata <a href="https://twitter.com/search?q=%23screenshotsaturday&amp;src=hash" title="#screenshotsaturday" class="rtw_hashtag_link">#screenshotsaturday</a> <a href="https://twitter.com/search?q=%23ue4&amp;src=hash" title="#ue4" class="rtw_hashtag_link">#ue4</a> <a href="https://t.co/WQDP6QWBMg" title="https://twitter.com/LaurenceMuller/status/1368367433266962442/photo/1" class="rtw_media_link">pic.twitter.com/WQDP6QWBMg</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1368367433266962442">About 8 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+	<div class="rotatingtweet" style="display: none; position: absolute; top: 0px; left: 0px; z-index: 1; width: 320px;">
+		<p class="rtw_main">Huawei’s HarmonyOS: “Fake it till you make it” meets OS development <a href="https://t.co/WyYawEUc5N" title="https://arstechnica.com/?post_type=post&amp;p=1733167" class="rtw_url_link">arstechnica.com/?post_type=po…</a></p>
+		<p class="rtw_meta"><a href="https://twitter.com/twitterapi/status/1356714500217597956">About 9 months ago</a> from <a href="https://twitter.com/intent/user?screen_name=LaurenceMuller" title="Laurence Muller">Laurence Muller's Twitter</a></p></div>
+</div>
+<div class="rtw_follow follow-button"><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-follow-button twitter-follow-button-rendered" style="position: static; visibility: visible; width: 271px; height: 20px;" title="Twitter Follow Button" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/follow_button.a53eecb4584348a2ad32ec2ae21f6eae.en.html" data-screen-name="LaurenceMuller"></iframe></div></li><li class="widget"><h3>Random quotes</h3>			<div class="execphpwidget"><ul class="list-quotes">
+<li>If at first you don't succeed, put it out for beta test.   </li>
+      </ul></div>
+		</li><li class="widget"><h3>HCI Conferences</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://www.its2010.org/">ACM Tabletop 2010 (Saarbrucken, Germany)</a></li>
+<li><a href="http://www.its2011.jp/">ACM Tabletop 2011 (Japan)</a></li>
+<li><a href="http://its2012conf.org/">ACM Tabletop 2012 (Cambridge, MA, USA)</a></li>
+<li><a href="http://www.chi2009.org/" title="CHI 2009 (ACM SIGCHI)">CHI 2009 (Boston, MA, USA)</a></li>
+<li><a href="http://www.chi2010.org/" title="We are HCI">CHI 2010 (Atlanta, GA, USA)</a></li>
+<li><a href="http://www.chi2011.org/">CHI 2011 (Vancouver, BC, CA)</a></li>
+<li><a href="http://chi2012.acm.org/">CHI 2012 (Austin, TX, USA)</a></li>
+<li><a href="http://www.int-displays.com/">IDC 2009 (San Jose, CA, USA)</a></li>
+<li><a href="http://www.ieeetabletop.org/" title="IEEE Tabletop 2008">IEEE Tabletop 2008 (Amsterdam, NL)</a></li>
+<li><a href="http://www.tis2009.org/" title="IEEE Tabletops and Interactive Surfaces 2009">IEEE Tabletop 2009 (Banff, Canada)</a></li>
+<li><a href="http://sc08.supercomputing.org/" title="SuperComputing 2008">SuperComputing 2008 (Austin, TX, USA)</a></li>
+<li><a href="http://www.tei-conf.org/10/">TEI 2010 (Cambridge, MA, USA)</a></li>
+<li><a href="http://www.tei-conf.org/11/hm/">TEI 2011 (Funchal, Portugal)</a></li>
+
+	</ul>
+</li>
+<li class="widget"><h3>Multitouch</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://www.whitenoiseaudio.com/blog/" title="Whitenoise’s blog">David Wallin (whitenoise)</a></li>
+<li><a href="http://www.multitouch.nl/" title="Gravano’s Blog">Harry van der Veen (gravano)</a></li>
+<li><a href="http://sassexperience.org/" title="Jimi Hertz">Jimi Hertz</a></li>
+<li><a href="http://www.gscept.com/" title="Johannes Hirche">Johannes Hirche (xwolf)</a></li>
+<li><a href="http://nui.joshland.org/">Joshua Blake</a></li>
+<li><a href="http://www.justinireland.com/">Justin Ireland</a></li>
+<li><a href="http://interactivemultimediatechnology.blogspot.com/" title="Interactive Multimedia Technology Blog">Lynn Marentette</a></li>
+<li><a href="http://txzone.net/" title="Blog of Mathieu Virbel (Tito)">Mathieu Virbel (Tito)</a></li>
+<li><a href="http://orionmultitouch.blogspot.com/">Paul D’Intino (Fairlane)</a></li>
+<li><a href="http://www.intactlab.nl/" title="Ralph Das’ Blog">Ralph Das</a></li>
+<li><a href="http://theclevermonkey.blogspot.com/" title="Richard Monson-Haefel (Multitouch Designer &amp; Developer)">Richard Monson-Haefel (clevermonkey)</a></li>
+<li><a href="http://www.touchtech.se/en/" title="FooBar by Seb">Sebastian Hartman</a></li>
+<li><a href="http://www.sethsandler.com/" title="Multi-touch musical interface">Seth Sandler (cerupcat)</a></li>
+<li><a href="http://sharathpatali.wordpress.com/" title="Sharath Patali Blog">Sharath Patali</a></li>
+<li><a href="http://www.socoamsterdam.nl/" title="SOCO Amsterdam">SOCO Amsterdam</a></li>
+<li><a href="http://mtaha.wordpress.com/" title="Taha Bintahir">Taha Bintahir</a></li>
+<li><a href="http://blog.tehansen.de/" title="Thomas Hansenâ€™s Thoughts and Doings">Thomas Hansen</a></li>
+<li><a href="http://iad.projects.zhdk.ch/multitouch/" title="Tim Roth’s Project">Tim Roth</a></li>
+<li><a href="http://www.touchlib.com/" title="Touchlib multitouch library">Touchlib</a></li>
+
+	</ul>
+</li>
+<li class="widget"><h3>Multitouch (commercial)</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://www.apple.com/ipad/">Apple iPad</a></li>
+<li><a href="http://www.apple.com/iphone/features/multitouch.html" title="Apple iPhone using multi-touch technology">Apple iPhone</a></li>
+<li><a href="http://www.merl.com/projects/DiamondTouch/" title="Mitsubishi’s MERL DiamondTouch Multi-Touch Display">MERL DiamondTouch</a></li>
+<li><a href="http://www.microsoft.com/surface/" title="MS Surface">MS Surface</a></li>
+<li><a href="http://www.perceptivepixel.com/" title="Perceptive Pixel">Perceptive Pixel</a></li>
+
+	</ul>
+</li>
+<li class="widget"><h3>Science</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://www.seas.harvard.edu/directory/cshen">Dr. C. Shen</a></li>
+<li><a href="http://staff.science.uva.nl/~robbel/">Dr. R.G. Belleman</a></li>
+<li><a href="http://www.seas.harvard.edu/">Harvard SEAS</a></li>
+<li><a href="http://sdr.seas.harvard.edu/">Harvard University SDR Lab</a></li>
+<li><a href="http://staff.science.uva.nl/~sloot/">Prof. Peter Sloot</a></li>
+<li><a href="http://www.science.uva.nl/research/scs/visualization/">Scientific Visualization and Virtual Reality Research Group</a></li>
+<li><a href="http://www.uva.nl/" title="Universiteit van Amsterdam">Universiteit van Amsterdam</a></li>
+
+	</ul>
+</li>
+		<li id="archive" class="widget clearfix">
+			<div>
+				<h3>Archive</h3>
+				<ul>
+						<li><a href="https://multigesture.net/2021/09/">September 2021</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2021/05/">May 2021</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2021/03/">March 2021</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2012/08/">August 2012</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2012/04/">April 2012</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2012/02/">February 2012</a>&nbsp;(2)</li>
+	<li><a href="https://multigesture.net/2011/11/">November 2011</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2011/03/">March 2011</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2010/12/">December 2010</a>&nbsp;(4)</li>
+	<li><a href="https://multigesture.net/2010/11/">November 2010</a>&nbsp;(2)</li>
+	<li><a href="https://multigesture.net/2010/04/">April 2010</a>&nbsp;(2)</li>
+	<li><a href="https://multigesture.net/2010/02/">February 2010</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2009/12/">December 2009</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2009/08/">August 2009</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2009/07/">July 2009</a>&nbsp;(3)</li>
+	<li><a href="https://multigesture.net/2009/02/">February 2009</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2008/12/">December 2008</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2008/11/">November 2008</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2008/09/">September 2008</a>&nbsp;(2)</li>
+	<li><a href="https://multigesture.net/2008/07/">July 2008</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2008/05/">May 2008</a>&nbsp;(3)</li>
+	<li><a href="https://multigesture.net/2008/03/">March 2008</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2008/02/">February 2008</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2008/01/">January 2008</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2007/11/">November 2007</a>&nbsp;(2)</li>
+	<li><a href="https://multigesture.net/2007/09/">September 2007</a>&nbsp;(5)</li>
+	<li><a href="https://multigesture.net/2007/07/">July 2007</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2007/06/">June 2007</a>&nbsp;(1)</li>
+	<li><a href="https://multigesture.net/2007/05/">May 2007</a>&nbsp;(5)</li>
+	<li><a href="https://multigesture.net/2007/04/">April 2007</a>&nbsp;(3)</li>
+				</ul>
+			</div>
+			<div>
+				<h3>Category</h3>
+				<ul>
+						<li class="cat-item cat-item-11"><a href="https://multigesture.net/category/android/">Android</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://multigesture.net/category/application/">Application</a>
+</li>
+	<li class="cat-item cat-item-52"><a href="https://multigesture.net/category/blackberry/">BlackBerry</a>
+</li>
+	<li class="cat-item cat-item-2"><a href="https://multigesture.net/category/blogroll/">Blogroll</a>
+</li>
+	<li class="cat-item cat-item-49"><a href="https://multigesture.net/category/featured/">Featured</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://multigesture.net/category/howto/">Howto</a>
+</li>
+	<li class="cat-item cat-item-46"><a href="https://multigesture.net/category/infovis/">Infovis</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://multigesture.net/category/multitouch/">Multitouch</a>
+</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+<!--<div class="clearfix"></div>--></div></div>	<div id="footer">
+		<div class="width ">
+			<ul id="footer-widget" class="clearfix">
+				<li class="widget"><h3>Tags</h3><div class="tagcloud"><a href="https://multigesture.net/tag/adobe-air/" class="tag-cloud-link tag-link-28 tag-link-position-1" style="font-size: 16.46511627907pt;" aria-label="adobe air (11 items)">adobe air</a>
+<a href="https://multigesture.net/tag/android/" class="tag-cloud-link tag-link-54 tag-link-position-2" style="font-size: 9.953488372093pt;" aria-label="Android (2 items)">Android</a>
+<a href="https://multigesture.net/tag/application-2/" class="tag-cloud-link tag-link-25 tag-link-position-3" style="font-size: 19.286821705426pt;" aria-label="application (21 items)">application</a>
+<a href="https://multigesture.net/tag/chat/" class="tag-cloud-link tag-link-15 tag-link-position-4" style="font-size: 8pt;" aria-label="chat (1 item)">chat</a>
+<a href="https://multigesture.net/tag/conference/" class="tag-cloud-link tag-link-18 tag-link-position-5" style="font-size: 13.209302325581pt;" aria-label="conference (5 items)">conference</a>
+<a href="https://multigesture.net/tag/diy/" class="tag-cloud-link tag-link-43 tag-link-position-6" style="font-size: 9.953488372093pt;" aria-label="diy (2 items)">diy</a>
+<a href="https://multigesture.net/tag/emulation-2/" class="tag-cloud-link tag-link-51 tag-link-position-7" style="font-size: 8pt;" aria-label="emulation (1 item)">emulation</a>
+<a href="https://multigesture.net/tag/facebook/" class="tag-cloud-link tag-link-48 tag-link-position-8" style="font-size: 9.953488372093pt;" aria-label="facebook (2 items)">facebook</a>
+<a href="https://multigesture.net/tag/flash/" class="tag-cloud-link tag-link-27 tag-link-position-9" style="font-size: 8pt;" aria-label="flash (1 item)">flash</a>
+<a href="https://multigesture.net/tag/games/" class="tag-cloud-link tag-link-32 tag-link-position-10" style="font-size: 11.255813953488pt;" aria-label="games (3 items)">games</a>
+<a href="https://multigesture.net/tag/google-earth/" class="tag-cloud-link tag-link-50 tag-link-position-11" style="font-size: 12.341085271318pt;" aria-label="google earth (4 items)">google earth</a>
+<a href="https://multigesture.net/tag/gsoc/" class="tag-cloud-link tag-link-24 tag-link-position-12" style="font-size: 8pt;" aria-label="gsoc (1 item)">gsoc</a>
+<a href="https://multigesture.net/tag/hacking/" class="tag-cloud-link tag-link-44 tag-link-position-13" style="font-size: 14.511627906977pt;" aria-label="hacking (7 items)">hacking</a>
+<a href="https://multigesture.net/tag/harvard/" class="tag-cloud-link tag-link-23 tag-link-position-14" style="font-size: 8pt;" aria-label="harvard (1 item)">harvard</a>
+<a href="https://multigesture.net/tag/hci/" class="tag-cloud-link tag-link-22 tag-link-position-15" style="font-size: 17.767441860465pt;" aria-label="hci (15 items)">hci</a>
+<a href="https://multigesture.net/tag/howto-2/" class="tag-cloud-link tag-link-37 tag-link-position-16" style="font-size: 8pt;" aria-label="howto (1 item)">howto</a>
+<a href="https://multigesture.net/tag/infovis-2/" class="tag-cloud-link tag-link-47 tag-link-position-17" style="font-size: 13.209302325581pt;" aria-label="infovis (5 items)">infovis</a>
+<a href="https://multigesture.net/tag/irc/" class="tag-cloud-link tag-link-14 tag-link-position-18" style="font-size: 8pt;" aria-label="IRC (1 item)">IRC</a>
+<a href="https://multigesture.net/tag/kinect/" class="tag-cloud-link tag-link-42 tag-link-position-19" style="font-size: 8pt;" aria-label="kinect (1 item)">kinect</a>
+<a href="https://multigesture.net/tag/latency/" class="tag-cloud-link tag-link-36 tag-link-position-20" style="font-size: 8pt;" aria-label="latency (1 item)">latency</a>
+<a href="https://multigesture.net/tag/mma/" class="tag-cloud-link tag-link-26 tag-link-position-21" style="font-size: 15.054263565891pt;" aria-label="mma (8 items)">mma</a>
+<a href="https://multigesture.net/tag/multitouch-2/" class="tag-cloud-link tag-link-19 tag-link-position-22" style="font-size: 22pt;" aria-label="multitouch (38 items)">multitouch</a>
+<a href="https://multigesture.net/tag/museum/" class="tag-cloud-link tag-link-20 tag-link-position-23" style="font-size: 8pt;" aria-label="museum (1 item)">museum</a>
+<a href="https://multigesture.net/tag/nasa/" class="tag-cloud-link tag-link-35 tag-link-position-24" style="font-size: 8pt;" aria-label="nasa (1 item)">nasa</a>
+<a href="https://multigesture.net/tag/nuigroup/" class="tag-cloud-link tag-link-29 tag-link-position-25" style="font-size: 9.953488372093pt;" aria-label="nuigroup (2 items)">nuigroup</a>
+<a href="https://multigesture.net/tag/projects/" class="tag-cloud-link tag-link-45 tag-link-position-26" style="font-size: 8pt;" aria-label="projects (1 item)">projects</a>
+<a href="https://multigesture.net/tag/showcase/" class="tag-cloud-link tag-link-21 tag-link-position-27" style="font-size: 17.550387596899pt;" aria-label="showcase (14 items)">showcase</a>
+<a href="https://multigesture.net/tag/sparkon/" class="tag-cloud-link tag-link-16 tag-link-position-28" style="font-size: 8pt;" aria-label="sparkon (1 item)">sparkon</a>
+<a href="https://multigesture.net/tag/surface-computing/" class="tag-cloud-link tag-link-40 tag-link-position-29" style="font-size: 8pt;" aria-label="surface computing (1 item)">surface computing</a>
+<a href="https://multigesture.net/tag/tabletop/" class="tag-cloud-link tag-link-17 tag-link-position-30" style="font-size: 9.953488372093pt;" aria-label="tabletop (2 items)">tabletop</a>
+<a href="https://multigesture.net/tag/technology/" class="tag-cloud-link tag-link-39 tag-link-position-31" style="font-size: 15.054263565891pt;" aria-label="technology (8 items)">technology</a>
+<a href="https://multigesture.net/tag/thesis/" class="tag-cloud-link tag-link-31 tag-link-position-32" style="font-size: 9.953488372093pt;" aria-label="thesis (2 items)">thesis</a>
+<a href="https://multigesture.net/tag/touchlib/" class="tag-cloud-link tag-link-33 tag-link-position-33" style="font-size: 9.953488372093pt;" aria-label="touchlib (2 items)">touchlib</a>
+<a href="https://multigesture.net/tag/touch-tracer/" class="tag-cloud-link tag-link-38 tag-link-position-34" style="font-size: 9.953488372093pt;" aria-label="touch tracer (2 items)">touch tracer</a>
+<a href="https://multigesture.net/tag/tutorial/" class="tag-cloud-link tag-link-41 tag-link-position-35" style="font-size: 14.511627906977pt;" aria-label="tutorial (7 items)">tutorial</a>
+<a href="https://multigesture.net/tag/tv/" class="tag-cloud-link tag-link-34 tag-link-position-36" style="font-size: 8pt;" aria-label="tv (1 item)">tv</a>
+<a href="https://multigesture.net/tag/uva/" class="tag-cloud-link tag-link-30 tag-link-position-37" style="font-size: 13.968992248062pt;" aria-label="uva (6 items)">uva</a></div>
+</li>
+		<li class="widget">
+		<h3>Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="https://multigesture.net/2021/09/25/my-mobile-journey/">My mobile journey</a>
+									</li>
+											<li>
+					<a href="https://multigesture.net/2021/05/07/inspecting-network-traffic-of-any-android-app/">Inspecting Network Traffic of any Android App</a>
+									</li>
+											<li>
+					<a href="https://multigesture.net/2021/03/06/creating-my-own-cycling-trainer-app/">Creating my own Cycling Trainer App</a>
+									</li>
+											<li>
+					<a href="https://multigesture.net/2012/08/02/nodebeat-featured-on-the-blackberry-dev-blog/">NodeBeat featured on the BlackBerry Dev blog</a>
+									</li>
+											<li>
+					<a href="https://multigesture.net/2012/04/27/playbook-add-on-ofxqnx/">PlayBook add-on (ofxQNX)</a>
+									</li>
+					</ul>
+
+		</li><li class="widget"><h3>Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Julien Cubizolles</span> on <a href="https://multigesture.net/articles/how-to-compile-unison-for-a-synology-nas-dsm-6-2/comment-page-1/#comment-553476">How to compile Unison for a Synology NAS (DSM 6.2)</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.intuiface.com/" rel="external nofollow ugc" class="url">richard</a></span> on <a href="https://multigesture.net/2008/03/01/real-time-fluid-dynamics-on-a-multi-touch-table/comment-page-1/#comment-552034">Real-Time Fluid Dynamics on a Multi-touch Table</a></li><li class="recentcomments"><span class="comment-author-link">Rainmaker</span> on <a href="https://multigesture.net/articles/how-to-compile-unison-for-a-synology-nas-dsm-6-2/comment-page-1/#comment-551835">How to compile Unison for a Synology NAS (DSM 6.2)</a></li><li class="recentcomments"><span class="comment-author-link">RabanePaco</span> on <a href="https://multigesture.net/articles/how-to-use-cron-on-a-synology-nas/comment-page-1/#comment-549417">How to use cron on a Synology NAS</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://multigesture.net/" rel="external nofollow ugc" class="url">Laurence Muller</a></span> on <a href="https://multigesture.net/articles/how-to-compile-unison-for-a-synology-ds212/comment-page-1/#comment-541469">How to compile Unison for a Synology DS212+</a></li></ul></li><li class="widget"><h3>About</h3>			<div class="textwidget">Site content copyright 2007-2021 Laurence Muller. All rights reserved.<br><br>
+The website usage statistics for multigesture.net are tracked by <a href="http://www.google.com/analytics">Google Analytics</a>.</div>
+		</li>			</ul>
+		<div id="contact">
+							</div>
+		<div id="credit" class="clearfix">
+        	<div style="float:left !important;width:40% !important;white-space:nowrap;">
+				<p class="footer_text">© 2021 Multigesture.net is proudly powered by <a href="http://wordpress.org/">WordPress</a></p>			<p>
+				<a href="https://multigesture.net/?f=site">Standard</a> | 
+				<a href="https://multigesture.net/?f=mobile">Mobile</a>
+			</p>
+					</div>
+        	<div style="float:right !important;width:40% !important;white-space:nowrap;">
+        		<p id="kreativethemes">A quality product from<a href="http://www.kreativethemes.com/" title="KreativeThemes"></a></p>
+            </div>
+        </div>
+		</div><!-- .width -->
+	</div><!-- #footer -->
+	
+</div><!-- #wrapper -->
+
+	<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/wp-syntax.js" id="wp-syntax-js-js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/comment-reply.min.js" id="comment-reply-js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/wp-embed.min.js" id="wp-embed-js"></script>
+<script defer="" type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/form.js" id="akismet-form-js"></script>
+<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/tab.js"></script>
+
+	<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/blogger.js"></script>
+	<script type="text/javascript" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/LaurenceMuller.json"></script>
+	<script type="text/javascript">
+	<!--
+	jQuery(function($){
+	    //snip
+		$("#author,#url,#email,#message").fieldtag();
+	    //snap
+	});
+	-->
+	</script>
+
+
+
+
+<!-- Dynamic page generated in 1.516 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2021-10-18 21:44:57 -->
+
+<!-- Compression = gzip --><iframe scrolling="no" frameborder="0" allowtransparency="true" src="./How to write an emulator (CHIP-8 interpreter) _ Multigesture.net_files/widget_iframe.a53eecb4584348a2ad32ec2ae21f6eae.html" title="Twitter settings iframe" style="display: none;"></iframe></body></html>

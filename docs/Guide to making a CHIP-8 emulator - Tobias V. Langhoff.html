@@ -1,0 +1,1465 @@
+
+<!-- saved from url=(0056)https://tobiasvl.github.io/blog/write-a-chip-8-emulator/ -->
+<html lang="en" class=" js "><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>
+    .utterances {
+      position: relative;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .utterances-frame {
+      color-scheme: light;
+      position: absolute;
+      left: 0;
+      right: 0;
+      width: 1px;
+      min-width: 100%;
+      max-width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  </style>
+    
+
+<!-- begin _includes/seo.html --><title>Guide to making a CHIP-8 emulator - Tobias V. Langhoff</title>
+<meta name="description" content="A high-level guide to making a CHIP-8 emulator.">
+
+
+  <meta name="author" content="Tobias V. Langhoff">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Tobias V. Langhoff">
+<meta property="og:title" content="Guide to making a CHIP-8 emulator">
+<meta property="og:url" content="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/">
+
+
+  <meta property="og:description" content="A high-level guide to making a CHIP-8 emulator.">
+
+
+
+  <meta property="og:image" content="https://tobiasvl.github.io/assets/images/cosmac-vip-manual.png">
+
+
+
+  <meta name="twitter:site" content="@Spug">
+  <meta name="twitter:title" content="Guide to making a CHIP-8 emulator">
+  <meta name="twitter:description" content="A high-level guide to making a CHIP-8 emulator.">
+  <meta name="twitter:url" content="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://tobiasvl.github.io/assets/images/cosmac-vip-manual.png">
+  
+
+  
+
+
+
+  <meta property="article:published_time" content="2020-07-20T00:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/">
+
+
+
+
+<script type="text/javascript" async="" src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/analytics.js"></script><script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "https://tobiasvl.github.io/",
+      "sameAs": ["https://twitter.com/Spug","https://github.com/tobiasvl","https://tobiasvl.itch.io","https://instagram.com/spugster"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="https://tobiasvl.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="Tobias V. Langhoff Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/main.css">
+<link rel="stylesheet" href="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  <style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></head>
+
+  
+
+  <body class="layout--single ">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="https://tobiasvl.github.io/">
+          Tobias V. Langhoff
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://tobiasvl.github.io/posts/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://tobiasvl.github.io/tags/">Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://tobiasvl.github.io/about/">About</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button" count="0">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope="" itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/tvl-photo.jpg" alt="Tobias V. Langhoff" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Tobias V. Langhoff</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Software developer from Norway</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/Spug" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span class="label">@Spug</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/tobiasvl" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">tobiasvl</span></a></li>
+          
+        
+          
+            <li><a href="https://tobiasvl.itch.io/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-itch-io" aria-hidden="true"></i><span class="label">tobiasvl</span></a></li>
+          
+        
+          
+            <li><a href="https://tvil.bandcamp.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-bandcamp" aria-hidden="true"></i><span class="label">tvil</span></a></li>
+          
+        
+          
+            <li><a href="https://instagram.com/spugster" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">spugster</span></a></li>
+          
+        
+          
+            <li><a href="https://www.trueachievements.com/gamer/tobiasvl/gamecollection" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-xbox" aria-hidden="true"></i><span class="label">tobiasvl</span></a></li>
+          
+        
+          
+            <li><a href="https://https//www.last.fm/user/Spug" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-lastfm-square" aria-hidden="true"></i><span class="label">Spug</span></a></li>
+          
+        
+          
+            <li><a href="https://www.goodreads.com/user/show/11408214-tobias-langhoff" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-goodreads" aria-hidden="true"></i><span class="label">Goodreads</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope="" itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Guide to making a CHIP-8 emulator">
+    <meta itemprop="description" content="A high-level guide to making a CHIP-8 emulator.">
+    <meta itemprop="datePublished" content="2020-07-20T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Guide to making a CHIP-8 emulator
+</h1>
+          
+
+
+  <p class="page__meta">
+
+    
+      
+      <i class="far fa-calendar-alt" aria-hidden="true"></i>
+      <time datetime="2020-07-20T00:00:00+00:00">July 20, 2020</time>
+    
+
+    
+      
+      <span class="post__meta-sep"></span>
+      
+    
+
+    
+      
+      
+
+      <i class="far fa-clock" aria-hidden="true"></i>
+      
+        30 minute read
+      
+    
+
+  </p>
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li class=""><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#history">History</a></li>
+  <li class=""><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#prerequisites">Prerequisites</a></li>
+  <li class="active"><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#specifications">Specifications</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#memory">Memory</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#font">Font</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#display">Display</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#stack">Stack</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#timers">Timers</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#keypad">Keypad</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fetchdecodeexecute-loop">Fetch/decode/execute loop</a>
+    <ul>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#timing">Timing</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fetch">Fetch</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#decode">Decode</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#execute">Execute</a></li>
+    </ul>
+  </li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#instructions">Instructions</a>
+    <ul>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#0nnn-execute-machine-language-routine">0NNN: Execute machine language routine</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#00e0-clear-screen">00E0: Clear screen</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#1nnn-jump">1NNN: Jump</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#00ee-and-2nnn-subroutines">00EE and 2NNN: Subroutines</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#3xnn-4xnn-5xy0-and-9xy0-skip">3XNN, 4XNN, 5XY0 and 9XY0: Skip</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#6xnn-set">6XNN: Set</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#7xnn-add">7XNN: Add</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#logical-and-arithmetic-instructions">Logical and arithmetic instructions</a>
+        <ul>
+          <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy0-set">8XY0: Set</a></li>
+          <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy1-binary-or">8XY1: Binary OR</a></li>
+          <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy2-binary-and">8XY2: Binary AND</a></li>
+          <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy3-logical-xor">8XY3: Logical XOR</a></li>
+          <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy4-add">8XY4: Add</a></li>
+          <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy5-and-8xy7-subtract">8XY5 and 8XY7: Subtract</a></li>
+          <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy6-and-8xye-shift">8XY6 and 8XYE: Shift</a></li>
+        </ul>
+      </li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#annn-set-index">ANNN: Set index</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#bnnn-jump-with-offset">BNNN: Jump with offset</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#cxnn-random">CXNN: Random</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#dxyn-display">DXYN: Display</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#ex9e-and-exa1-skip-if-key">EX9E and EXA1: Skip if key</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx07-fx15-and-fx18-timers">FX07, FX15 and FX18: Timers</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx1e-add-to-index">FX1E: Add to index</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx0a-get-key">FX0A: Get key</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx29-font-character">FX29: Font character</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx33-binary-coded-decimal-conversion">FX33: Binary-coded decimal conversion</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx55-and-fx65-store-and-load-memory">FX55 and FX65: Store and load memory</a></li>
+    </ul>
+  </li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#troubleshooting">Troubleshooting</a></li>
+  <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#what-next">What next</a>
+    <ul>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#make-your-own-chip-8-game">Make your own CHIP-8 game!</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#add-super-chip-support">Add SUPER-CHIP support</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#add-debug-capabilities">Add debug capabilities</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#add-xo-chip-support">Add XO-CHIP support</a></li>
+      <li><a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#make-a-chip-8-emulator-for-an-obscure-system">Make a CHIP-8 emulator for an obscure system</a></li>
+    </ul>
+  </li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>A high-level guide to making a CHIP-8 emulator.</p>
+
+<!--more-->
+
+<p>Do you want to get into emulator development? A common advice is to start out with CHIP-8. But how do you do that? Why are there so many different specifications?</p>
+
+<p>This is a guide for you. It will tell you how to make a CHIP-8 emulator, but it won’t give away the code. It will explain what each part should do, and use some pseudocode at times, but the actual implementation will be up to you.</p>
+
+<p>Along the way I’ll put tips in green boxes, warnings in orange boxes (things to look out for), and trivia (mostly historical) in blue boxes. Like this one:</p>
+
+<p class="notice--info">Everyone calls them “CHIP-8 emulators”, but they’re not actually emulators. An emulator <em>emulates</em> physical hardware in software, but CHIP-8 isn’t a piece of hardware. To be pedantic, you’re writing a CHIP-8 <em>interpreter</em>.</p>
+
+<p>If you have any suggestions for this guide, or just want to show off an emulator you’ve made, please leave a comment at the end of the page!</p>
+
+<h2 id="history" class="">History<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#history" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>CHIP-8 was created by RCA engineer Joe Weisbecker in 1977 for the COSMAC VIP microcomputer. It was intended as a simpler way to make small programs and games for the computer. Instead of using machine language for the VIP’s CDP1802 processor, you could type in simple hexadecimal instructions (with the VIP’s hex keypad) that resembled machine code, but which was actually interpreted on the fly by a small program.</p>
+
+<p>CHIP-8 soon spread to other computers, like the Finnish Telmac 1800, the Australian DREAM 6800, ETI-660 and MicroBee, and the Canadian ACE VDU. By 1984 the support for CHIP-8 petered out. However, in 1990 it had a renaissance on the HP48 graphing calculators with CHIP-48 and the now-famous SUPER-CHIP extension with higher resolution.</p>
+
+<p>With so many different implementations over several decades, there are many inconsistent specifications. I’ll clear those up for you along the way.</p>
+
+<p class="notice--info">Michael J. Bauer, who made the DREAM 6800 computer and its CHIP-8 interpreter in 1978, invented the following backronym for CHIP-8: <strong>Compact Hexadecimal Interpretive Programming – 8-bit</strong>.</p>
+
+<h2 id="prerequisites" class="">Prerequisites<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#prerequisites" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>This is a CHIP-8 tutorial, not a programming tutorial. You should already know some programming before making an emulator, in my opinion, or you’ll have a rough time.</p>
+
+<p>You will also need to have a basic understanding of the binary and hexadecimal number systems; I will write hexadecimal numbers like this: <code class="language-plaintext highlighter-rouge">B3</code>. CHIP-8 programs are binary files, and your emulator will need to read these files and operate on the bytes.</p>
+
+<p>You will also need a way to draw graphics to the screen, and read keypresses. Many graphical libraries can do this for you, or you can use something like <a href="https://www.libsdl.org/">SDL</a> directly.</p>
+
+<h2 id="specifications" class="active">Specifications<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#specifications" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>CHIP-8 has the following components:</p>
+
+<ul>
+  <li><em>Memory</em>: CHIP-8 has direct access to up to 4 kilobytes of RAM</li>
+  <li><em>Display</em>: 64 x 32 pixels (or 128 x 64 for SUPER-CHIP) monochrome, ie. black or white</li>
+  <li>A <em>program counter</em>, often called just “PC”, which points at the current instruction in memory</li>
+  <li>One 16-bit <em>index register</em> called “I” which is used to point at locations in memory</li>
+  <li>A <em>stack</em> for 16-bit addresses, which is used to call subroutines/functions and return from them</li>
+  <li>An 8-bit <em>delay timer</em> which is decremented at a rate of 60 Hz (60 times per second) until it reaches 0</li>
+  <li>An 8-bit <em>sound timer</em> which functions like the delay timer, but which also gives off a beeping sound as long as it’s not 0</li>
+  <li>16 8-bit (one byte) general-purpose <em>variable</em> registers numbered <code class="language-plaintext highlighter-rouge">0</code> through <code class="language-plaintext highlighter-rouge">F</code> hexadecimal, ie. 0 through 15 in decimal, called <code class="language-plaintext highlighter-rouge">V0</code> through <code class="language-plaintext highlighter-rouge">VF</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">VF</code> is also used as a <em>flag register</em>; many instructions will set it to either 1 or 0 based on some rule, for example using it as a carry flag</li>
+    </ul>
+  </li>
+</ul>
+
+<p>That’s it!</p>
+
+<h2 id="memory">Memory<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#memory" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>The memory should be 4 kB (4 kilobytes, ie. 4096 bytes) large. CHIP-8’s index register and program counter can only address 12 bits (conveniently), which is 4096 addresses.</p>
+
+<p class="notice--info">The index register, program counter and stack entries are all actually 16 bits long. In theory, they could increment beyond 4 kB of memory addresses. In practice, no CHIP-8 games do that. The early computers running CHIP-8 usually had less than 4 kB of RAM anyway.</p>
+
+<p>All the memory is RAM and should be considered to be writable. CHIP-8 games can, and do, modify themselves.</p>
+
+<p class="notice--info">CHIP-8 programs you find online as binary files are often called “ROMs”, like game files for video game emulators, but unlike games on console cartridges they were not actually ROM (which means “read-only memory”).</p>
+
+<p>The first CHIP-8 interpreter (on the COSMAC VIP computer) was also located in RAM, from address <code class="language-plaintext highlighter-rouge">000</code> to <code class="language-plaintext highlighter-rouge">1FF</code>. It would expect a CHIP-8 program to be loaded into memory after it, starting at address <code class="language-plaintext highlighter-rouge">200</code> (512 in decimal). Although modern interpreters are not in the same memory space, you should do the same to be able to run the old programs; you can just leave the initial space empty, except for the font.</p>
+
+<h2 id="font">Font<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#font" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>The CHIP-8 emulator should have a built-in font, with sprite data representing the hexadecimal numbers from <code class="language-plaintext highlighter-rouge">0</code> through <code class="language-plaintext highlighter-rouge">F</code>. Each font character should be 4 pixels wide by 5 pixels tall. These font sprites are drawn just like regular sprites (see below).</p>
+
+<p>You should store the font data in memory, because games will draw these characters like regular sprites: They set the index register I to the character’s memory location and then draw it. There’s a special instruction for setting I to a character’s address, so you can choose where to put it. Anywhere in the first 512 bytes (<code class="language-plaintext highlighter-rouge">000</code>–<code class="language-plaintext highlighter-rouge">1FF</code>) is fine. For some reason, it’s become popular to put it at <code class="language-plaintext highlighter-rouge">050</code>–<code class="language-plaintext highlighter-rouge">09F</code>, so you can follow that convention if you want.</p>
+
+<p>The font most people use is represented in bytes like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+0x20, 0x60, 0x20, 0x20, 0x70, // 1
+0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+</code></pre></div></div>
+
+<!-- TODO FONT IMAGE -->
+
+<p class="notice--info">In theory you could design your own font; it’s unlikely that any games rely on the shapes of the characters. Many of <a href="https://github.com/mattmikolay/chip-8/issues/3">the early computer implementations had their own fonts</a>.</p>
+
+<h2 id="display">Display<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#display" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>The display is 64 pixels wide and 32 pixels tall. Each pixel can be <em>on</em> or <em>off</em>. In other words, each pixel is a boolean value, or a bit.</p>
+
+<p class="notice--info">The early computers used regular TVs as screens, so an “off” pixel was just black, and “on” was white. You can pick other colors.</p>
+
+<p>Original interpreters updated the display at 60 Hz (ie. they had 60 FPS, to use modern terminology). How you do this is up to you, but depending on the framework you use, it might be a good idea to only redraw the screen when your emulator executes an instruction that modifies the display data (there are two), to run faster.</p>
+
+<p>The details of the drawing instruction <code class="language-plaintext highlighter-rouge">DXYN</code> are found below, but in short, it is used to draw a “sprite” on the screen. Each sprite consists of 8-bit bytes, where each bit corresponds to a horizontal pixel; sprites are between 1 and 15 bytes tall. They’re drawn to the screen by treating all 0 bits as transparent, and all the 1 bits will “flip” the pixels in the locations of the screen that it’s drawn to. (You might recognize this as logical XOR.)</p>
+
+<p>This method of drawing will inevitable cause some flickering objects; when a sprite is moved, it’s first erased from the screen (by simply drawing it again, flipping all its lit pixels) and then re-drawn in the new position, so it will disappear for a little while, often causing a flickering effect. If you want, you can try to think of ways to mitigate this. For example, pixels that are erased could fade out instead of disappearing completely, giving an old phosphorous CRT-style effect.</p>
+
+<h2 id="stack">Stack<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#stack" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>CHIP-8 has a <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">stack</a> (a common “last in, first out” data structure where you can either “push” data to it or “pop” the last piece of data you pushed). You can represent it however you’d like; a stack if your programming language has it, or an array. CHIP-8 uses it to call and return from subroutines (“functions”) and nothing else, so you will be saving addresses there; 16-bit (or really only 12-bit) numbers.</p>
+
+<p>Early interpreters reserved some memory for the stack, and some programs would use that knowledge to operate the stack directly and save stuff there, but you don’t need to do that. You can just use a variable outside the emulated memory.</p>
+
+<p>These original interpreters had limited space on the stack; usually 12 or 16 two-byte entries. You can limit the stack likewise, or just keep it unlimited. It doesn’t really matter (unless you encounter a program with a bug that has an infinite call loop and causes a “stack overflow”).</p>
+
+<h2 id="timers">Timers<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#timers" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>There are two separate timer registers: The delay timer and the sound timer. They both work the same way; they’re one byte in size, and as long as their value is above 0, they should be decremented by one 60 times per second (ie. at 60 Hz). This is independent of the speed of the fetch/decode/execute loop below.</p>
+
+<p>The sound timer is special in that it should make the computer “beep” as long as it’s above 0.</p>
+
+<p>Even though it’s called the “delay” timer, your interpreter should run as normal while it’s being decremented (the same goes for the sound timer). The CHIP-8 game will check the value of the timer and delay itself if it wants.</p>
+
+<h2 id="keypad">Keypad<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#keypad" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>The earliest computers that CHIP-8 were used with had hexadecimal keypads. These had 16 keys, labelled <code class="language-plaintext highlighter-rouge">0</code> through <code class="language-plaintext highlighter-rouge">F</code>, and were arranged in a 4x4 grid.</p>
+
+<p class="notice--info">On the original COSMAC VIP, a sound (the same sound as the sound timer uses) would be heard while holding down a key. This might be a little obnoxious, though…</p>
+
+<p>These keypads all had different layouts, but the COSMAC VIP used the following layout, which was re-used on the HP48 calculators, so that’s what everyone implements these days:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>D</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>0</td>
+      <td>B</td>
+      <td>F</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="">
+  <img src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/cosmac-vip-keypad.png" alt="">
+  
+    <figcaption>
+      The COSMAC VIP keypad
+
+    </figcaption>
+  
+</figure>
+
+<p class="notice--info">If you want to support a wide range of CHIP-8 games for different computers, you could add options for other arrangements of the keys. The other most common layout (used by many DREAM 6800 and ETI-660 computers) started with <code class="language-plaintext highlighter-rouge">0</code> in the upper left corner and ran down to <code class="language-plaintext highlighter-rouge">F</code> in the bottom right corner.</p>
+
+<p>For CHIP-8 emulators that run on modern PCs, it’s customary to use the left side of the QWERTY keyboard for this:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><kbd>1</kbd></td>
+      <td><kbd>2</kbd></td>
+      <td><kbd>3</kbd></td>
+      <td><kbd>4</kbd></td>
+    </tr>
+    <tr>
+      <td><kbd>Q</kbd></td>
+      <td><kbd>W</kbd></td>
+      <td><kbd>E</kbd></td>
+      <td><kbd>R</kbd></td>
+    </tr>
+    <tr>
+      <td><kbd>A</kbd></td>
+      <td><kbd>S</kbd></td>
+      <td><kbd>D</kbd></td>
+      <td><kbd>F</kbd></td>
+    </tr>
+    <tr>
+      <td><kbd>Z</kbd></td>
+      <td><kbd>X</kbd></td>
+      <td><kbd>C</kbd></td>
+      <td><kbd>V</kbd></td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="notice--success">You will probably want to use keyboard <em>scancodes</em> rather than key string constants, so people who use different keyboard layouts (like AZERTY) can use your emulator.</p>
+
+<h2 id="fetchdecodeexecute-loop">Fetch/decode/execute loop<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fetchdecodeexecute-loop" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>An emulator’s main task is simple. It runs in an infinite loop, and does these three tasks in succession:</p>
+
+<ul>
+  <li><strong>Fetch</strong> the instruction from memory at the current PC (program counter)</li>
+  <li><strong>Decode</strong> the instruction to find out what the emulator should do</li>
+  <li><strong>Execute</strong> the instruction and do what it tells you</li>
+</ul>
+
+<p>I’ll go through each of these steps below, but first: What speed should this loop run at? If you just run it as-is, your powerful computer will probably run the games way too fast to be playable.</p>
+
+<h3 id="timing">Timing<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#timing" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>The original CHIP-8 computers had processors that ran at something like 1 MHz, and the 90s HP48 calculators ran at around 4 MHz. That doesn’t tell us much, since the CHIP-8 instructions took a different number of cycles to run in their machine code implementations – and on different computers back then – but it does mean that different games might expect to run at different speeds, so you will probably want to make it configurable.</p>
+
+<p class="notice--info">For the original timings for CHIP-8 instructions in the COSMAC VIP interpreter, see this page: <a href="https://jackson-s.me/2019/07/13/Chip-8-Instruction-Scheduling-and-Frequency.html">Chip 8 Instruction Scheduling and Frequency</a>.</p>
+
+<p>In practice, a standard speed of around 700 CHIP-8 instructions per second fits well enough for most CHIP-8 programs you’ll find, which are mostly from the 90s. Play a few different ones and get a feel for what speed seems right.</p>
+
+<h3 id="fetch">Fetch<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fetch" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>Read the instruction that PC is currently pointing at from memory. An instruction is two bytes, so you will need to read two successive bytes from memory and combine them into one 16-bit instruction.</p>
+
+<p>You should then immediately increment the PC by 2, to be ready to fetch the next opcode. Some people do this during the “execute” stage, since some instructions will increment it by 2 more to skip an instruction, but in my opinion that’s very error-prone. Code duplication is a bad thing. If you forget to increment it in one of the instructions, you’ll have problems. Do it here!</p>
+
+<h3 id="decode">Decode<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#decode" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>Other systems than CHIP-8 will have a more advanced “decode” stage (the opcode could have different addressing modes, operands, etc.). For CHIP-8, it’s pretty simple.</p>
+
+<p>CHIP-8 instructions are divided into broad categories by the first “nibble”, or “half-byte”, which is the first hexadecimal number. So, you basically just want to do a huge <code class="language-plaintext highlighter-rouge">if</code>/<code class="language-plaintext highlighter-rouge">elseif</code> statement here, doing different things depending on what the first number is.</p>
+
+<p>If your language supports <code class="language-plaintext highlighter-rouge">switch</code> statements, that’s by far the easiest way to go. Mask off (with a “binary AND”) the first number in the instruction, and have one <code class="language-plaintext highlighter-rouge">case</code> per number. Some of these cases will need separate <code class="language-plaintext highlighter-rouge">switch</code> statements inside them to further decode the instruction.</p>
+
+<p class="notice--warning">In C or C++, remember to <code class="language-plaintext highlighter-rouge">break;</code> inside each case, or you’ll “fall through” to the next.</p>
+
+<p>Although every instruction will have a first nibble that tells you what kind of instruction it is, the rest of the nibbles will have different meanings. To differentiate these meanings, we usually call them different things, but all of them can be any hexadecimal number from 0 to F:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">X</code>: The second nibble. Used to look up one of the 16 registers (<code class="language-plaintext highlighter-rouge">VX</code>) from <code class="language-plaintext highlighter-rouge">V0</code> through <code class="language-plaintext highlighter-rouge">VF</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">Y</code>: The third nibble. Also used to look up one of the 16 registers (<code class="language-plaintext highlighter-rouge">VY</code>) from <code class="language-plaintext highlighter-rouge">V0</code> through <code class="language-plaintext highlighter-rouge">VF</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">N</code>: The fourth nibble. A 4-bit number.</li>
+  <li><code class="language-plaintext highlighter-rouge">NN</code>: The second byte (third and fourth nibbles). An 8-bit immediate number.</li>
+  <li><code class="language-plaintext highlighter-rouge">NNN</code>: The second, third and fourth nibbles. A 12-bit immediate memory address.</li>
+</ul>
+
+<p>To avoid code duplication again, I suggest you extract these values from the opcode before decoding, instead of doing it inside each instruction. If you do it wrong just one place, you’ll have a hard time tracking that down.</p>
+
+<p class="notice--info">If you use C or another language with <code class="language-plaintext highlighter-rouge">#define</code> or other macro directives, using that is probably a good idea!</p>
+
+<p>Note that <code class="language-plaintext highlighter-rouge">X</code> and <code class="language-plaintext highlighter-rouge">Y</code> are always used to look up the values in registers. One mistake I see a lot of make early on (and I’ve done it myself) is that they’ll use the acual value <code class="language-plaintext highlighter-rouge">X</code> in the instruction. You never want that! That’s only for the <code class="language-plaintext highlighter-rouge">N</code> operands. <code class="language-plaintext highlighter-rouge">X</code> and <code class="language-plaintext highlighter-rouge">Y</code> should always look up a value in the corresponding register.</p>
+
+<h3 id="execute">Execute<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#execute" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>For CHIP-8, if you went with the <code class="language-plaintext highlighter-rouge">switch</code> approach (or similar), this won’t really be a separate stage. Just directly do what the instruction should do inside each <code class="language-plaintext highlighter-rouge">case</code>.</p>
+
+<p>In emulators for other systems, you might have a whole bunch of instructions of the same type – say, to add two numbers together – where the operands can be registers, 
+memory locations, immediate values, etc. (these are called addressing modes). But for CHIP-8, that doesn’t matter.</p>
+
+<h2 id="instructions">Instructions<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#instructions" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>It’s time to actually decode the instructions! Just go one by one.</p>
+
+<p>A small tip here. I suggest you start out with the following instructions:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">00E0</code> (clear screen)</li>
+  <li><code class="language-plaintext highlighter-rouge">1NNN</code> (jump)</li>
+  <li><code class="language-plaintext highlighter-rouge">6XNN</code> (set register <code class="language-plaintext highlighter-rouge">VX</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">7XNN</code> (add value to register <code class="language-plaintext highlighter-rouge">VX</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">ANNN</code> (set index register I)</li>
+  <li><code class="language-plaintext highlighter-rouge">DXYN</code> (display/draw)</li>
+</ul>
+
+<p>The reason for this is that while you implement these instructions, you can test them very easily with the <strong>IBM logo</strong> program, which you can easily find online (search “chip-8 ibm logo”). All this program does is display the IBM logo, and it only uses the above instructions. This will let you quickly implement the most important instruction, the “display” instruction <code class="language-plaintext highlighter-rouge">DXYN</code>, which you will need to run more advanced test ROMs since these all display the results on the screen.</p>
+
+<p>If successful, the program should draw the following and then enter an infinite loop:</p>
+
+<figure class="">
+  <img src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/chip-8_ibm_logo.png" alt="">
+  
+    <figcaption>
+      The grid has been added as a visual aid while debugging
+
+    </figcaption>
+  
+</figure>
+
+<p>When you’ve managed to get this on your display, you can use test programs to check your implementation of the rest of the instructions as you go along. There are two main tests:</p>
+
+<ul>
+  <li>The BonCoder/BestCoder test, <code class="language-plaintext highlighter-rouge">BC_test</code> (can be found online)</li>
+  <li><a href="https://github.com/corax89/chip8-test-rom">corax89’s chip8-test-rom</a></li>
+</ul>
+
+<p>Note that both these test programs rely on the “modern” behavior in the few ambiguous instructions listed below (I put red warning labels above their descriptions).</p>
+
+<h3 id="0nnn-execute-machine-language-routine"><code class="language-plaintext highlighter-rouge">0NNN</code>: Execute machine language routine<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#0nnn-execute-machine-language-routine" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>We’ll start out with an instruction that you actually don’t want to implement! In the original CHIP-8 interpreters, this would pause execution of the CHIP-8 program and call a subroutine written in machine language at address <code class="language-plaintext highlighter-rouge">NNN</code> instead.</p>
+
+<p>This routine would be written in the machine language of the computer’s CPU; on the original COSMAC VIP and the ETI-660, this was 1802 machine code, and on the DREAM 6800, M6800 code. Unless you’re making an emulator for either of those computers, skip this one.</p>
+
+<h3 id="00e0-clear-screen"><code class="language-plaintext highlighter-rouge">00E0</code>: Clear screen<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#00e0-clear-screen" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This is pretty simple: It should clear the display, turning all pixels off to 0.</p>
+
+<h3 id="1nnn-jump"><code class="language-plaintext highlighter-rouge">1NNN</code>: Jump<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#1nnn-jump" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This instruction should simply set PC to <code class="language-plaintext highlighter-rouge">NNN</code>, causing the program to jump to that memory location. Do not increment the PC afterwards, it jumps directly there.</p>
+
+<h3 id="00ee-and-2nnn-subroutines"><code class="language-plaintext highlighter-rouge">00EE</code> and <code class="language-plaintext highlighter-rouge">2NNN</code>: Subroutines<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#00ee-and-2nnn-subroutines" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p><code class="language-plaintext highlighter-rouge">2NNN</code> calls the subroutine at memory location <code class="language-plaintext highlighter-rouge">NNN</code>. In other words, just like <code class="language-plaintext highlighter-rouge">1NNN</code>, you should set PC to <code class="language-plaintext highlighter-rouge">NNN</code>. However, the difference between a jump and a call is that this instruction should first should push the current PC to the stack, so the subroutine can return later.</p>
+
+<p>Returning from a subroutine is done with <code class="language-plaintext highlighter-rouge">00EE</code>, and it does this by removing (“popping”) the last address from the stack and setting the PC to it.</p>
+
+<h3 id="3xnn-4xnn-5xy0-and-9xy0-skip"><code class="language-plaintext highlighter-rouge">3XNN</code>, <code class="language-plaintext highlighter-rouge">4XNN</code>, <code class="language-plaintext highlighter-rouge">5XY0</code> and <code class="language-plaintext highlighter-rouge">9XY0</code>: Skip<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#3xnn-4xnn-5xy0-and-9xy0-skip" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>These instructions do the same thing: They either do nothing, or they skip one two-byte instruction (increment PC by 2). If you didn’t increment PC in the “fetch” stage above, they will obviously increment PC by either 4 or 2.</p>
+
+<p><code class="language-plaintext highlighter-rouge">3XNN</code> will skip one instruction if the value in <code class="language-plaintext highlighter-rouge">VX</code> is equal to <code class="language-plaintext highlighter-rouge">NN</code>, and <code class="language-plaintext highlighter-rouge">4XNN</code> will skip if they are <em>not</em> equal.</p>
+
+<p><code class="language-plaintext highlighter-rouge">5XY0</code> skips if the values in <code class="language-plaintext highlighter-rouge">VX</code> and <code class="language-plaintext highlighter-rouge">VY</code> are equal, while <code class="language-plaintext highlighter-rouge">9XY0</code> skips if they are not equal.</p>
+
+<p>Since these conditional branch instructions can only skip one instructions, they’re usually followed by a jump/call (<code class="language-plaintext highlighter-rouge">1NNN</code>/<code class="language-plaintext highlighter-rouge">2NNN</code>) instruction.</p>
+
+<h3 id="6xnn-set"><code class="language-plaintext highlighter-rouge">6XNN</code>: Set<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#6xnn-set" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>Simply set the register <code class="language-plaintext highlighter-rouge">VX</code> to the value <code class="language-plaintext highlighter-rouge">NN</code>.</p>
+
+<h3 id="7xnn-add"><code class="language-plaintext highlighter-rouge">7XNN</code>: Add<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#7xnn-add" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>Add the value <code class="language-plaintext highlighter-rouge">NN</code> to <code class="language-plaintext highlighter-rouge">VX</code>.</p>
+
+<p>Note that on most other systems, and even in some of the other CHIP-8 instructions, this would set the carry flag if the result overflowed 8 bits. In other words, if the result of the addition is over 255.</p>
+
+<p>For this instruction, this is not the case. If <code class="language-plaintext highlighter-rouge">V0</code> contains <code class="language-plaintext highlighter-rouge">FF</code> and you execute <code class="language-plaintext highlighter-rouge">6001</code>, the CHIP-8’s flag register <code class="language-plaintext highlighter-rouge">VF</code> is not affected.</p>
+
+<h3 id="logical-and-arithmetic-instructions">Logical and arithmetic instructions<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#logical-and-arithmetic-instructions" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>We come to the first group of instructions that need further decoding beyond just the first nibble! All these instructions are logical or arithmetic operations, but which one is decided by the last nibble of the opcode. Do another nested <code class="language-plaintext highlighter-rouge">switch</code> statement (or equivalent) here.</p>
+
+<p class="notice--info">On the COSMAC VIP, all of these instructions changed the value of <code class="language-plaintext highlighter-rouge">VF</code>. Some of them are mentioned below. For the ones that don’t mention affecting <code class="language-plaintext highlighter-rouge">VF</code>, the resulting value in <code class="language-plaintext highlighter-rouge">VF</code> is undefined. This is because the CHIP-8 interpreter dispatched these instructions to the 1802 CPU’s ALU circuit, and while doing so it would change the CPU’s flag register, which always gets copied to <code class="language-plaintext highlighter-rouge">VF</code>.</p>
+
+<h4 id="8xy0-set"><code class="language-plaintext highlighter-rouge">8XY0</code>: Set<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy0-set" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h4>
+
+<p><code class="language-plaintext highlighter-rouge">VX</code> is set to the value of <code class="language-plaintext highlighter-rouge">VY</code>.</p>
+
+<h4 id="8xy1-binary-or"><code class="language-plaintext highlighter-rouge">8XY1</code>: Binary OR<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy1-binary-or" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h4>
+
+<p><code class="language-plaintext highlighter-rouge">VX</code> is set to the <a href="https://en.wikipedia.org/wiki/Bitwise_operation#OR">bitwise/binary logical disjunction (OR)</a> of <code class="language-plaintext highlighter-rouge">VX</code> and <code class="language-plaintext highlighter-rouge">VY</code>. <code class="language-plaintext highlighter-rouge">VY</code> is not affected.</p>
+
+<h4 id="8xy2-binary-and"><code class="language-plaintext highlighter-rouge">8XY2</code>: Binary AND<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy2-binary-and" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h4>
+
+<p><code class="language-plaintext highlighter-rouge">VX</code> is set to the <a href="https://en.wikipedia.org/wiki/Bitwise_operation#AND">bitwise/binary logical conjunction (AND)</a> of <code class="language-plaintext highlighter-rouge">VX</code> and <code class="language-plaintext highlighter-rouge">VY</code>. <code class="language-plaintext highlighter-rouge">VY</code> is not affected.</p>
+
+<h4 id="8xy3-logical-xor"><code class="language-plaintext highlighter-rouge">8XY3</code>: Logical XOR<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy3-logical-xor" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h4>
+
+<p><code class="language-plaintext highlighter-rouge">VX</code> is set to the <a href="https://en.wikipedia.org/wiki/Bitwise_operation#XOR">bitwise/binary exclusive OR (XOR)</a> of <code class="language-plaintext highlighter-rouge">VX</code> and <code class="language-plaintext highlighter-rouge">VY</code>. <code class="language-plaintext highlighter-rouge">VY</code> is not affected.</p>
+
+<h4 id="8xy4-add"><code class="language-plaintext highlighter-rouge">8XY4</code>: Add<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy4-add" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h4>
+
+<p><code class="language-plaintext highlighter-rouge">VX</code> is set to the value of <code class="language-plaintext highlighter-rouge">VX</code> plus the value of <code class="language-plaintext highlighter-rouge">VY</code>. <code class="language-plaintext highlighter-rouge">VY</code> is not affected.</p>
+
+<p>Unlike <code class="language-plaintext highlighter-rouge">7XNN</code>, this addition will affect the carry flag. If the result is larger than 255 (and thus overflows the 8-bit register <code class="language-plaintext highlighter-rouge">VX</code>), the flag register <code class="language-plaintext highlighter-rouge">VF</code> is set to 1. If it doesn’t overflow, <code class="language-plaintext highlighter-rouge">VF</code> is set to 0.</p>
+
+<h4 id="8xy5-and-8xy7-subtract"><code class="language-plaintext highlighter-rouge">8XY5</code> and <code class="language-plaintext highlighter-rouge">8XY7</code>: Subtract<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy5-and-8xy7-subtract" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h4>
+
+<p>These both subtract the value in one register from the other, and put the result in <code class="language-plaintext highlighter-rouge">VX</code>. In both cases, <code class="language-plaintext highlighter-rouge">VY</code> is not affected.</p>
+
+<p><code class="language-plaintext highlighter-rouge">8XY5</code> sets <code class="language-plaintext highlighter-rouge">VX</code> to the result of <code class="language-plaintext highlighter-rouge">VX</code> - <code class="language-plaintext highlighter-rouge">VY</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">8XY7</code> sets <code class="language-plaintext highlighter-rouge">VX</code> to the result of <code class="language-plaintext highlighter-rouge">VY</code> - <code class="language-plaintext highlighter-rouge">VX</code>.</p>
+
+<p>This subtraction will also affect the carry flag, but note that it’s opposite from what you might think. If the minuend (the first operand) is larger than the subtrahend (second operand), <code class="language-plaintext highlighter-rouge">VF</code> will be set to 1. If the subtrahend is larger, and we “underflow” the result, <code class="language-plaintext highlighter-rouge">VF</code> is set to 0. Another way of thinking of it is that <code class="language-plaintext highlighter-rouge">VF</code> is set to 1 before the subtraction, and then the subtraction either borrows from <code class="language-plaintext highlighter-rouge">VF</code> (setting it to 0) or not.</p>
+
+<h4 id="8xy6-and-8xye-shift"><code class="language-plaintext highlighter-rouge">8XY6</code> and <code class="language-plaintext highlighter-rouge">8XYE</code>: Shift<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#8xy6-and-8xye-shift" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h4>
+
+<p class="notice--warning">Ambiguous instruction!</p>
+
+<p>In the CHIP-8 interpreter for the original COSMAC VIP, this instruction did the following: It put the value of <code class="language-plaintext highlighter-rouge">VY</code> into <code class="language-plaintext highlighter-rouge">VX</code>, and then shifted the value in <code class="language-plaintext highlighter-rouge">VX</code> 1 bit to the right (<code class="language-plaintext highlighter-rouge">8XY6</code>) or left (<code class="language-plaintext highlighter-rouge">8XYE</code>). <code class="language-plaintext highlighter-rouge">VY</code> was not affeced, but the flag register <code class="language-plaintext highlighter-rouge">VF</code> would be set to the bit that was shifted out.</p>
+
+<p>However, starting with CHIP-48 and SUPER-CHIP in the early 1990s, these instructions were changed so that they shifted <code class="language-plaintext highlighter-rouge">VX</code> in place, and ignored the <code class="language-plaintext highlighter-rouge">Y</code> completely.</p>
+
+<p>This is one of the main differences between implementations that cause problems for programs.</p>
+
+<p>Step by step:</p>
+
+<ol>
+  <li>(Optional, or configurable) Set <code class="language-plaintext highlighter-rouge">VX</code> to the value of <code class="language-plaintext highlighter-rouge">VY</code></li>
+  <li>Shift the value of <code class="language-plaintext highlighter-rouge">VX</code> one bit to the right (<code class="language-plaintext highlighter-rouge">8XY6</code>) or left ( 8XYE`)</li>
+  <li>Set <code class="language-plaintext highlighter-rouge">VF</code> to 1 if the bit that was shifted out was 1, or 0 if it was 0</li>
+</ol>
+
+<h3 id="annn-set-index"><code class="language-plaintext highlighter-rouge">ANNN</code>: Set index<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#annn-set-index" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This sets the index register I to the value <code class="language-plaintext highlighter-rouge">NNN</code>.</p>
+
+<h3 id="bnnn-jump-with-offset"><code class="language-plaintext highlighter-rouge">BNNN</code>: Jump with offset<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#bnnn-jump-with-offset" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p class="notice--warning">Ambiguous instruction!</p>
+
+<p>In the original COSMAC VIP interpreter, this instruction jumped to the address <code class="language-plaintext highlighter-rouge">NNN</code> plus the value in the register <code class="language-plaintext highlighter-rouge">V0</code>. This was mainly used for “jump tables”, to quickly be able to jump to different subroutines based on some input.</p>
+
+<p>Starting with CHIP-48 and SUPER-CHIP, it was (probably unintentionally) changed to work as <code class="language-plaintext highlighter-rouge">BXNN</code>: It will jump to the address <code class="language-plaintext highlighter-rouge">XNN</code>, plus the value in the register <code class="language-plaintext highlighter-rouge">VX</code>. So the instruction <code class="language-plaintext highlighter-rouge">B220</code> will jump to address <code class="language-plaintext highlighter-rouge">220</code> plus the value in the register <code class="language-plaintext highlighter-rouge">V2</code>.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">BNNN</code> instruction was not widely used, so you might be able to just implement the first behavior (if you pick one, that’s definitely the one to go with). If you want to support a wide range of CHIP-8 programs, make this “quirk” configurable.</p>
+
+<h3 id="cxnn-random"><code class="language-plaintext highlighter-rouge">CXNN</code>: Random<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#cxnn-random" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This instruction generates a random number, binary ANDs it with the value <code class="language-plaintext highlighter-rouge">NN</code>, and puts the result in <code class="language-plaintext highlighter-rouge">VX</code>.</p>
+
+<p>Most likely your programming language has a function for generating random numbers. It will work fine for this use.</p>
+
+<p class="notice--warning">Note that you should not simply generate a random number between 0 and <code class="language-plaintext highlighter-rouge">NN</code>! You need to do a binary AND.</p>
+
+<h3 id="dxyn-display"><code class="language-plaintext highlighter-rouge">DXYN</code>: Display<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#dxyn-display" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This is the most involved instruction. It will draw an <code class="language-plaintext highlighter-rouge">N</code> pixels tall sprite from the memory location that the <code class="language-plaintext highlighter-rouge">I</code> index register is holding to the screen, at the horizontal X coordinate in <code class="language-plaintext highlighter-rouge">VX</code> and the Y coordinate in <code class="language-plaintext highlighter-rouge">VY</code>. All the pixels that are “on” in the sprite will flip the pixels on the screen that it is drawn to. If any pixels on the screen were turned “off” by this, the <code class="language-plaintext highlighter-rouge">VF</code> flag register is set to 1. Otherwise, it’s set to 0.</p>
+
+<p>Sounds hard? Well, it is, a little.</p>
+
+<p>The first thing to do is to get the X and Y coordinates from <code class="language-plaintext highlighter-rouge">VX</code> and <code class="language-plaintext highlighter-rouge">VY</code>.</p>
+
+<p>A common mistake here is to use <code class="language-plaintext highlighter-rouge">X</code> and <code class="language-plaintext highlighter-rouge">Y</code> directly; don’t do that, fetch them from the registers.</p>
+
+<p>One area where people get confused is whether sprites should wrap if they go over the edge of the screen. The answer is yes and no.</p>
+
+<p>The starting position of the sprite will wrap. In other words, an X coordinate of 5 is the same as an X of 68 (since the screen is 64 pixels wide). Another way of saying it is that the coordinates are <em>modulo</em> (or binary AND) the size of the display (when counting from 0).</p>
+
+<p>However, the actual drawing of the sprite should not wrap. If a sprite is drawn near the edge of the screen, it should be clipped, and not wrap. The sprite should be partly drawn near the edge, and the other part should not reappear on the opposite side of the screen.</p>
+
+<p>Skip this if you want to try to implement it yourself first, but here’s a step by step summary of what this instruction should do:</p>
+
+<ul>
+  <li>Set the X coordinate to the value in <code class="language-plaintext highlighter-rouge">VX</code> <em>modulo</em> 64 (or, equivalently, <code class="language-plaintext highlighter-rouge">VX &amp; 63</code>, where &amp; is the binary AND operation)</li>
+  <li>Set the Y coordinate to the value in <code class="language-plaintext highlighter-rouge">VY</code> <em>modulo</em> 32 (or <code class="language-plaintext highlighter-rouge">VY &amp; 31</code>)</li>
+  <li>Set <code class="language-plaintext highlighter-rouge">VF</code> to 0</li>
+  <li>For <code class="language-plaintext highlighter-rouge">N</code> rows:
+    <ul>
+      <li>Get the Nth byte of sprite data, counting from the memory address in the <code class="language-plaintext highlighter-rouge">I</code> register (<code class="language-plaintext highlighter-rouge">I</code> is not incremented)</li>
+      <li>For each of the 8 pixels/bits in this sprite row:
+        <ul>
+          <li>If the current pixel in the sprite row is on and the pixel at coordinates X,Y on the screen is also on, turn off the pixel and set <code class="language-plaintext highlighter-rouge">VF</code> to 1</li>
+          <li>Or if the current pixel in the sprite row is on and the screen pixel is not, draw the pixel at the X and Y coordinates</li>
+          <li>If you reach the right edge of the screen, stop drawing this row</li>
+          <li>Increment X (<code class="language-plaintext highlighter-rouge">VX</code> is not incremented)</li>
+        </ul>
+      </li>
+      <li>Increment Y (<code class="language-plaintext highlighter-rouge">VY</code> is not incremented)</li>
+      <li>Stop if you reach the bottom edge of the screen</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Phew! Don’t worry, this is the worst one.</p>
+
+<h3 id="ex9e-and-exa1-skip-if-key"><code class="language-plaintext highlighter-rouge">EX9E</code> and <code class="language-plaintext highlighter-rouge">EXA1</code>: Skip if key<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#ex9e-and-exa1-skip-if-key" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>Like the earlier skip instructions, these two also skip the following instruction based on a condition. These skip based on whether the player is currently pressing a key or not.</p>
+
+<p>These instructions (unlike the later <code class="language-plaintext highlighter-rouge">FX0A</code>) don’t wait for input, they just check if the key is currently being held down.</p>
+
+<p><code class="language-plaintext highlighter-rouge">EX9E</code> will skip one instruction (increment PC by 2) if the key corresponding to the  value in <code class="language-plaintext highlighter-rouge">VX</code> is pressed.</p>
+
+<p><code class="language-plaintext highlighter-rouge">EXA1</code> skips if the key corresponding to the value in <code class="language-plaintext highlighter-rouge">VX</code> is <em>not</em> pressed.</p>
+
+<p>Since the keypad is hexadecimal, the valid values here are keys <code class="language-plaintext highlighter-rouge">0</code>–<code class="language-plaintext highlighter-rouge">F</code>.</p>
+
+<h3 id="fx07-fx15-and-fx18-timers"><code class="language-plaintext highlighter-rouge">FX07</code>, <code class="language-plaintext highlighter-rouge">FX15</code> and <code class="language-plaintext highlighter-rouge">FX18</code>: Timers<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx07-fx15-and-fx18-timers" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>These all manipulate the timers.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FX07</code> sets <code class="language-plaintext highlighter-rouge">VX</code> to the current value of the delay timer</li>
+  <li><code class="language-plaintext highlighter-rouge">FX15</code> sets the delay timer to the value in <code class="language-plaintext highlighter-rouge">VX</code></li>
+  <li><code class="language-plaintext highlighter-rouge">FX18</code> sets the sound timer to the value in <code class="language-plaintext highlighter-rouge">VX</code></li>
+</ul>
+
+<p>Note that there’s no instruction to read the sound timer; the sound timer will simply make a beeping sound as long as it’s above 0.</p>
+
+<h3 id="fx1e-add-to-index"><code class="language-plaintext highlighter-rouge">FX1E</code>: Add to index<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx1e-add-to-index" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>The index register I will get the value in <code class="language-plaintext highlighter-rouge">VX</code> added to it.</p>
+
+<p>Unlike other arithmetic instructions, this did not affect <code class="language-plaintext highlighter-rouge">VF</code> on overflow on the original COSMAC VIP. However, it seems that some interpreters set <code class="language-plaintext highlighter-rouge">VF</code> to 1 if I “overflows” from <code class="language-plaintext highlighter-rouge">0FFF</code> to above <code class="language-plaintext highlighter-rouge">1000</code> (outside the normal addressing range). This wasn’t the case on the original COSMAC VIP, at least, but apparently the CHIP-8 interpreter for Amiga behaved this way. At least one known game, <em>Spacefight 2091!</em>, relies on this behavior. I don’t know of any games that rely on this <em>not happening</em>, so perhaps it’s safe to do it like the Amiga interpreter did.</p>
+
+<h3 id="fx0a-get-key"><code class="language-plaintext highlighter-rouge">FX0A</code>: Get key<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx0a-get-key" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This instruction “blocks”; it stops execution and waits for key input. In other words, if you followed my advice earlier and increment PC after fetching each instruction, then it should be <em>decremented</em> again here unless a key is pressed. Otherwise, PC should simply not be incremented.</p>
+
+<p>If a key is pressed while this instruction is waiting for input, its hexadecimal value will be put in <code class="language-plaintext highlighter-rouge">VX</code> and execution continues.</p>
+
+<p>On the original COSMAC VIP, the key was only registered when it was pressed <em>and then released</em>.</p>
+
+<h3 id="fx29-font-character"><code class="language-plaintext highlighter-rouge">FX29</code>: Font character<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx29-font-character" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>The index register I is set to the address of the hexadecimal character in <code class="language-plaintext highlighter-rouge">VX</code>. You probably stored that font somewhere in the first 512 bytes of memory, so now you just need to point I to the right character.</p>
+
+<p>An 8-bit register can hold two hexadecimal numbers, but this would only point to one character. The original COSMAC VIP interpreter just took the last nibble of <code class="language-plaintext highlighter-rouge">VX</code> and used that as the character.</p>
+
+<h3 id="fx33-binary-coded-decimal-conversion"><code class="language-plaintext highlighter-rouge">FX33</code>: Binary-coded decimal conversion<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx33-binary-coded-decimal-conversion" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This instruction is a little involved. It takes the number in <code class="language-plaintext highlighter-rouge">VX</code> (which is one byte, so it can be any number from 0 to 255) and converts it to three decimal digits, storing these digits in memory at the address in the index register I. For example, if <code class="language-plaintext highlighter-rouge">VX</code> contains 156 (or <code class="language-plaintext highlighter-rouge">9C</code> in hexadecimal), it would put the number 1 at the address in I, 5 in address I + 1, and 6 in address I + 2.</p>
+
+<p>Many people seem to struggle with this instruction. You’re lucky; the early CHIP-8 interpreters couldn’t divide by 10 or easily calculate a number modulo 10, but you can probably do both in your programming language. Do it to extract the necessary digits.</p>
+
+<h3 id="fx55-and-fx65-store-and-load-memory"><code class="language-plaintext highlighter-rouge">FX55</code> and <code class="language-plaintext highlighter-rouge">FX65</code>: Store and load memory<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#fx55-and-fx65-store-and-load-memory" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p class="notice--warning">Ambiguous instruction!</p>
+
+<p>These two instructions store registers to memory, or load them from memory, respectively.</p>
+
+<p>For <code class="language-plaintext highlighter-rouge">FX55</code>, the value of each variable register from <code class="language-plaintext highlighter-rouge">V0</code> to <code class="language-plaintext highlighter-rouge">VX</code> inclusive (if <code class="language-plaintext highlighter-rouge">X</code> is 0, then only <code class="language-plaintext highlighter-rouge">V0</code>) will be stored in successive memory addresses, starting with the one that’s stored in <code class="language-plaintext highlighter-rouge">I</code>. <code class="language-plaintext highlighter-rouge">V0</code> will be stored at the address in <code class="language-plaintext highlighter-rouge">I</code>, <code class="language-plaintext highlighter-rouge">V1</code> will be stored in <code class="language-plaintext highlighter-rouge">I + 1</code>, and so on, until <code class="language-plaintext highlighter-rouge">VX</code> is stored in <code class="language-plaintext highlighter-rouge">I + X</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">FX65</code> does the same thing, except that it takes the value stored at the memory addresses and loads them into the variable registers instead.</p>
+
+<p>The original CHIP-8 interpreter for the COSMAC VIP actually incremented the <code class="language-plaintext highlighter-rouge">I</code> register while it worked. Each time it stored or loaded one register, it incremented <code class="language-plaintext highlighter-rouge">I</code>. After the instruction was finished, <code class="language-plaintext highlighter-rouge">I</code> would be set to the new value <code class="language-plaintext highlighter-rouge">I + X + 1</code>.</p>
+
+<p>However, modern interpreters (starting with CHIP48 and SUPER-CHIP in the early 90s) used a temporary variable for indexing, so when the instruction was finished, <code class="language-plaintext highlighter-rouge">I</code> would still hold the same value as it did before.</p>
+
+<p>If you only pick one behavior, go with the modern one that doesn’t actually change the value of <code class="language-plaintext highlighter-rouge">I</code>. This will let you run the common CHIP-8 games you find everywhere, and it’s also what the common test ROMs depend on (the other behavior will fail the tests). But if you want your emulator to run older games from the 1970s or 1980s, you should consider making a configurable option in your emulator to toggle between these behaviors.</p>
+
+<h2 id="troubleshooting">Troubleshooting<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#troubleshooting" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>Your emulator is done! What’s that? Something’s not working?</p>
+
+<p>To make your life easier, you should add some rudimentary debugging capabilities. For example, you should be able to step through CHIP-8 instructions one by one, pausing the regular loop. You should also be able to print the contents of registers and memory. That way you can step through a program and see that it behaves like you expect.</p>
+
+<p>One thing you should do is print out an error message if your emulator tries to execute an unknown instruction. There aren’t many of them, but if you suddenly try to execute a lot of <code class="language-plaintext highlighter-rouge">0000</code> instructions, you know you’ve somehow reached uninitialized memory.</p>
+
+<p>Like I said before, you should start out by getting the IBM logo program to run. Once you can draw to the screen properly, run one of the CHIP-8 test programs you can find online. They will check your instructions and tell you which ones aren’t working properly. (Note that for the ambiguous instructions, they will mostly expect the “modern” behavior.)</p>
+
+<p>If you’re still stumped, you can of course ask for help in the comments to this article below. There are also some great places to ask for help:</p>
+
+<ul>
+  <li><a href="https://reddit.com/r/EmuDev">/r/EmuDev on reddit</a></li>
+  <li><a href="https://discord.com/invite/7nuaqZ2">The Emulation Development Discord server</a> (there’s a #chip-8 channel)</li>
+</ul>
+
+<h2 id="what-next">What next<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#what-next" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h2>
+
+<p>If you’re like most people, you are now done with your obligatory “Hello, world!” emulator, and are ready to tackle your dream project. You could move on to emulating the Intel 8080 Space Invaders arcade cabinet if you want to learn more. Or perhaps you want to make a Game Boy emulator next; it has a lot more instructions and the screen drawing is more complex, but it’s still not too complicated to get a lot of games running.</p>
+
+<p>But if you think CHIP-8 is an interesting platform, there are many things you could do.</p>
+
+<h3 id="make-your-own-chip-8-game">Make your own CHIP-8 game!<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#make-your-own-chip-8-game" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>Now that you know CHIP-8’s instruction set pretty thoroughly, why not try to make a game that can run in your own emulator?</p>
+
+<p>Every October, an annual game jam called “Octojam” is organized, where people make games/programs for CHIP-8 (and SUPER-CHIP/XO-CHIP). Please join us! It’s run on itch.io; <a href="https://itch.io/jam/octojam-6">here’s the page for Octojam 6 (2019)</a>.</p>
+
+<p>Of course, you don’t need to wait until next October. Write a game any time and submit it to the <a href="https://johnearnest.github.io/chip8Archive/?sort=platform">CHIP-8 Archive</a>! You can also find los of great games to test your emulator with here.</p>
+
+<p>Typing in raw bytes to program your game isn’t very user friendly in 2020, so most people now use <a href="http://johnearnest.github.io/Octo/">Octo</a>, a high-level assembler for CHIP-8. There are also more traditional assemblers out there.</p>
+
+<h3 id="add-super-chip-support">Add SUPER-CHIP support<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#add-super-chip-support" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>SUPER-CHIP, which debuted on HP48 graphing calculators in 1991, makes things a little less primitive. It expands the resolution to 128 x 64, and adds some instructions for scrolling the display and drawing larger sprites in one go.</p>
+
+<p>It also changes the semantics of some CHIP-8 instructions, as I’ve detailed above, so options for toggling that behavior (“quirks”) will be a good idea. With SUPER-CHIP support, you will be able to run most programs you can find scattered around the net.</p>
+
+<p>Here’s a good quick guide to <a href="http://johnearnest.github.io/Octo/docs/SuperChip.html">Mastering Super-CHIP</a>.</p>
+
+<h3 id="add-debug-capabilities">Add debug capabilities<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#add-debug-capabilities" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>This would make your emulator useful to two groups of people: People who develop CHIP-8 games (<a href="https://itch.io/jam/octojam-6">yes, we do exist</a>) will be able to debug their games, and people who develop CHIP-8 emulators will be able to develop side by side with your emulator to see what they’re doing wrong.</p>
+
+<p>Debug interfaces can be very cool to make. <a href="https://twitter.com/kraptor/status/1153936421209509888">Look at this beauty!</a></p>
+
+<p>Plus, it’ll be very useful for other emulator projects. For more advaned systems, you’ll basically be doing it blind if you don’t have a way to inspect your emulator’s state.</p>
+
+<h3 id="add-xo-chip-support">Add XO-CHIP support<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#add-xo-chip-support" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>XO-CHIP is a modern extension of SUPER-CHIP. It adds two more colors, advanced sound capabilities, and supports 64 kb of memory. There aren’t too many XO-CHIP interpreters out there, so you could make something pretty unique. <a href="http://johnearnest.github.io/Octo/docs/XO-ChipSpecification.html">Read more about XO-CHIP here.</a></p>
+
+<h3 id="make-a-chip-8-emulator-for-an-obscure-system">Make a CHIP-8 emulator for an obscure system<a class="header-link" href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/#make-a-chip-8-emulator-for-an-obscure-system" title="Permalink"><span class="sr-only">Permalink</span><i class="fa fa-link"></i></a></h3>
+
+<p>CHIP-8 runs on everything. There’s an emulator for the SNES!</p>
+
+<p>But maybe there’s some platform that’s missing a good emulator? Maybe you want to try learning homebrew development for an old console, and think CHIP-8 would be a simple experiment? What about a really good ncurses emulator that you can run over SSH? Or what about a Telnet server you can connect to and play CHIP-8 on? Or how about playing CHIP-8 in your web browser’s inspect mode, like <a href="https://twitter.com/matthewrayfield/status/1189531704647733248">Inspect This Snake</a>?</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="https://tobiasvl.github.io/tags/#chip-8" class="page__taxonomy-item" rel="tag">CHIP-8</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://tobiasvl.github.io/tags/#emulation" class="page__taxonomy-item" rel="tag">Emulation</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="https://tobiasvl.github.io/categories/#blog" class="page__taxonomy-item" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-07-20T00:00:00+00:00">July 20, 2020</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="https://tobiasvl.github.io/blog/space-invaders/" class="pagination--pager" title="Emulating the Space Invaders look and feel
+">Previous</a>
+    
+    
+      <a href="https://tobiasvl.github.io/blog/chip-8-hp-48/" class="pagination--pager" title="Running CHIP-8 on an HP 48 calculator
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"><div class="utterances" style="height: 944px;">
+    <iframe class="utterances-frame" title="Comments" scrolling="no" src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/utterances.html" loading="lazy"></iframe>
+  </div></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/hp48.png" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="https://tobiasvl.github.io/blog/chip-8-hp-48/" rel="permalink">Running CHIP-8 on an HP 48 calculator
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+
+    
+      
+      <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+      <time datetime="2020-10-13T00:00:00+00:00">October 13, 2020</time>
+    
+
+    
+      
+        <br \="">
+      
+    
+
+    
+      
+      
+
+      <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+      
+        8 minute read
+      
+    
+
+  </p>
+
+    <p class="archive__item-excerpt" itemprop="description">How to use an advanced calculator as a “Game Boy” for CHIP-8!
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/moon_invaders.png" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="https://tobiasvl.github.io/blog/space-invaders/" rel="permalink">Emulating the Space Invaders look and feel
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+
+    
+      
+      <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+      <time datetime="2020-06-09T00:00:00+00:00">June 9, 2020</time>
+    
+
+    
+      
+        <br \="">
+      
+    
+
+    
+      
+      
+
+      <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+      
+        6 minute read
+      
+    
+
+  </p>
+
+    <p class="archive__item-excerpt" itemprop="description">My attempt at making a Space Invaders emulator look like the arcade cabinet.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/drom.png" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="https://tobiasvl.github.io/blog/an-emulator-ui/" rel="permalink">An emulator UI
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+
+    
+      
+      <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+      <time datetime="2020-05-31T00:00:00+00:00">May 31, 2020</time>
+    
+
+    
+      
+        <br \="">
+      
+    
+
+    
+      
+      
+
+      <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+      
+        5 minute read
+      
+    
+
+  </p>
+
+    <p class="archive__item-excerpt" itemprop="description">The RetroChallenge is over, and I finished my project, the DREAM 6800 emulator DRÖM.
+
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope="" itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/m6800-logo.png" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="https://tobiasvl.github.io/blog/choosing-the-wrong-m6800-assembler/" rel="permalink">Choosing the wrong M6800 assembler
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+
+    
+      
+      <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+      <time datetime="2020-04-29T00:00:00+00:00">April 29, 2020</time>
+    
+
+    
+      
+        <br \="">
+      
+    
+
+    
+      
+      
+
+      <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+      
+        4 minute read
+      
+    
+
+  </p>
+
+    <p class="archive__item-excerpt" itemprop="description">Using the wrong assembler can set your MC6800 on fire.
+
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != &#39;Enter&#39;;">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term...">
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://twitter.com/Spug" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> @Spug</a></li>
+        
+      
+        
+          <li><a href="https://github.com/tobiasvl" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> tobiasvl</a></li>
+        
+      
+        
+          <li><a href="https://tobiasvl.itch.io/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-itch-io" aria-hidden="true"></i> tobiasvl</a></li>
+        
+      
+        
+          <li><a href="https://tvil.bandcamp.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-bandcamp" aria-hidden="true"></i> tvil</a></li>
+        
+      
+        
+          <li><a href="https://instagram.com/spugster" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> spugster</a></li>
+        
+      
+        
+          <li><a href="https://www.trueachievements.com/gamer/tobiasvl/gamecollection" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-xbox" aria-hidden="true"></i> tobiasvl</a></li>
+        
+      
+        
+          <li><a href="https://https//www.last.fm/user/Spug" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-lastfm-square" aria-hidden="true"></i> Spug</a></li>
+        
+      
+        
+          <li><a href="https://www.goodreads.com/user/show/11408214-tobias-langhoff" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-goodreads" aria-hidden="true"></i> Goodreads</a></li>
+        
+      
+    
+
+    <li><a href="https://tobiasvl.github.io/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2021 Tobias V. Langhoff. Powered by <a href="https://jekyllrb.com/" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/main.min.js"></script>
+
+
+
+
+<script src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/lunr.min.js"></script>
+<script src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/lunr-store.js"></script>
+<script src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="./Guide to making a CHIP-8 emulator - Tobias V. Langhoff_files/js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-37898375-14', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'tobiasvl/tobiasvl.github.io');
+    script.setAttribute('issue-term', 'og:title');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+
+  
+
+</body></html>
